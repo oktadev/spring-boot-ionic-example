@@ -31,6 +31,8 @@ export class BeerPage {
   openModal(beerId) {
     let modal = this.modalCtrl.create(BeerModalPage, beerId);
     modal.present();
+    // refresh data after modal dismissed
+    modal.onDidDismiss(() => this.ionViewDidLoad())
   }
 
   remove(beer) {

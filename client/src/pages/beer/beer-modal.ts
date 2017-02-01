@@ -36,14 +36,10 @@ export class BeerModalPage {
     this.beerService.save(form).subscribe(result => {
       let toast = this.toastCtrl.create({
         message: 'Beer "' + form.name + '" ' + ((update) ? 'updated' : 'added') + '.',
-        duration: 2000,
-        position: 'top'
+        duration: 2000
       });
       toast.present();
-      // this should work, but doesn't refresh model
-      //this.viewCtrl.dismiss();
-      // this refreshes model
-      this.navCtrl.push(BeerPage);
+      this.dismiss();
     }, error => this.error = error)
   }
 }

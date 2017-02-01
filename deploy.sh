@@ -54,7 +54,7 @@ serverUri=https://`app_domain pwa-server`
 
 # Deploy the client
 cd $r/client
-rm -rf dist
+npm run clean
 # replace the server URL in the client
 sed -i -e "s|http://localhost:8080|$serverUri|g" $r/client/src/app/app.module.ts
 npm install && ionic build ios
