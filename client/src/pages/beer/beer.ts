@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController, ModalController, ToastController } from 'ionic-angular';
+import { NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
 import { BeerService } from '../../providers/beer-service';
 import { GiphyService } from '../../providers/giphy-service';
 import { BeerModalPage } from './beer-modal';
@@ -39,7 +39,7 @@ export class BeerPage {
         if (this.beers[i] === beer) {
           this.beers.splice(i, 1);
           let toast = this.toastCtrl.create({
-            message: 'Beer "' + beer.name + '" deleted successfully.',
+            message: 'Beer "' + beer.name + '" deleted.',
             duration: 2000,
             position: 'top'
           });

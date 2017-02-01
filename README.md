@@ -8,4 +8,4 @@ You can read about how this application was created on [the Stormpath blog](http
 
 To run the Spring Boot backend, cd into `server` and run `mvn spring-boot:run`.
 
-To run the Ionic frontend, execute `npm install && ionic serve`. The aforementioned blog post shows you how to deploy this app to an emulator/device. 
+In another terminal, cd into `client` and `execute `npm install && ionic serve`. The aforementioned blog post shows you how to deploy this app to an emulator/device. 
