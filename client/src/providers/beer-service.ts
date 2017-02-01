@@ -32,9 +32,7 @@ export class BeerService {
   save(beer: any): Observable<any> {
     let result: Observable<Response>;
     if (beer['href']) {
-      // get id from href
-      let id = beer.href.substring(beer.href.lastIndexOf('/'));
-      result = this.http.put(this.BEER_API + id, beer);
+      result = this.http.put(beer.href, beer);
     } else {
       result = this.http.post(this.BEER_API, beer)
     }
