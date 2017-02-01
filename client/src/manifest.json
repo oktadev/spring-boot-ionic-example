@@ -1,6 +1,6 @@
 {
-  "name": "Ionic Auth",
-  "short_name": "Ionic Auth",
+  "name": "Ionic Beer",
+  "short_name": "Ionic Beer",
   "start_url": "index.html",
   "display": "standalone",
   "icons": [{

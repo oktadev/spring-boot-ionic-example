@@ -2,13 +2,16 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs';
+import { StormpathConfiguration } from 'angular-stormpath';
 
 @Injectable()
 export class BeerService {
-  public API = 'http://localhost:8080';
-  public BEER_API = this.API + '/beers';
+  public API;
+  public BEER_API;
 
-  constructor(public http: Http) {
+  constructor(public http: Http, public config: StormpathConfiguration) {
+    this.API = config.endpointPrefix;
+    this.BEER_API = this.API + '/beers';
   }
 
   getGoodBeers(): Observable<any> {
