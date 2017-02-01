@@ -1,5 +1,5 @@
 import { BeerService } from '../../providers/beer-service';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { GiphyService } from '../../providers/giphy-service';
 import { NavParams, ViewController, ToastController, NavController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
@@ -9,6 +9,7 @@ import { BeerPage } from './beer';
   templateUrl: './beer-modal.html'
 })
 export class BeerModalPage {
+  @ViewChild('name') name;
   beer: any = {};
   error: any;
 
@@ -41,5 +42,11 @@ export class BeerModalPage {
       toast.present();
       this.dismiss();
     }, error => this.error = error)
+  }
+
+  ionViewDidLoad() {
+    setTimeout(() => {
+      this.name.setFocus();
+    },150);
   }
 }

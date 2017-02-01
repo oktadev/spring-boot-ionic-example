@@ -50,18 +50,18 @@ cf set-env ionic-server FORCE_HTTPS true
 cf start ionic-server
 
 # Get the URL for the server
-serverUri=https://`app_domain pwa-server`
+serverUri=https://`app_domain ionic-server`
 
 # Deploy the client
 cd $r/client
 npm run clean
 # replace the server URL in the client
-sed -i -e "s|http://localhost:8080|$serverUri|g" $r/client/src/app/app.module.ts
+sed -i -e "s|http://localhost:8080|$serverUri|g" src/app/app.module.ts
 npm install && ionic build ios
+
+# deploy client to phone
+ionic run ios
 
 # cleanup changed files
 git checkout $r/client
 rm $r/client/src/app/app.module.ts-e
-
-# deploy client to phone
-ionic run ios
