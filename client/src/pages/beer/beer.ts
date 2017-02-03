@@ -12,8 +12,7 @@ import { BeerModalPage } from './beer-modal';
 export class BeerPage {
   private beers: Array<any>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-              public beerService: BeerService, public giphyService: GiphyService,
+  constructor(public beerService: BeerService, public giphyService: GiphyService,
               public modalCtrl: ModalController, public toastCtrl: ToastController) {
   }
 
