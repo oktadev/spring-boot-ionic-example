@@ -382,8 +382,7 @@ Modify `beer.html` to
 </ion-content>
 ```
 
-
-Modify `beer.ts` to
+Modify `beer.ts` to be
 
 ```typescript
 import { Component } from '@angular/core';
@@ -406,6 +405,44 @@ export class BeerPage {
     })
   }
 }
+```
+
+To expose this page on the tab bar, add it to `tabs.ts`
+
+```typescript
+import { Component } from '@angular/core';
+
+import { HomePage } from '../home/home';
+import { AboutPage } from '../about/about';
+import { ContactPage } from '../contact/contact';
+import { BeerPage } from '../beer/beer';
+
+@Component({
+  templateUrl: 'tabs.html'
+})
+export class TabsPage {
+  // this tells the tabs component which Pages
+  // should be each tab's root Page
+  tab1Root: any = HomePage;
+  tab2Root: any = BeerPage;
+  tab3Root: any = ContactPage;
+  tab4Root: any = AboutPage;
+
+  constructor() {
+
+  }
+}
+```
+
+Update `tabs.html` too!
+
+```html
+<ion-tabs>
+  <ion-tab [root]="tab1Root" tabTitle="Home" tabIcon="home"></ion-tab>
+  <ion-tab [root]="tab2Root" tabTitle="Beer" tabIcon="beer"></ion-tab>
+  <ion-tab [root]="tab3Root" tabTitle="Contact" tabIcon="contacts"></ion-tab>
+  <ion-tab [root]="tab4Root" tabTitle="About" tabIcon="information-circle"></ion-tab>
+</ion-tabs>
 ```
 
 Add some fun with Giphy! Run `ionic generate provider giphy-service`. Replace the code in `src/providers/giphy-service.ts` with the following TypeScript:
