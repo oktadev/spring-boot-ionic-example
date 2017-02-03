@@ -270,8 +270,6 @@ At this point, you should see a login screen when you run `ionic serve`.
 
 ![Stormpath Login for Ionic](./static/ionic-login.png)
 
-If you don’t see this screen, it’s possible you’re still logged in. Clearing your local storage will fix this, or you can continue below to add the ability to logout.
-
 In `src/pages/home.html`, add a logout link to the header and a paragraph in the content section that shows the currently logged in user.
 
 ```html
