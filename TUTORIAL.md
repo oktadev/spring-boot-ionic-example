@@ -523,7 +523,7 @@ Update `beer.html` to display the image retrieved:
 If everything works as expected, you should see a page similar to the one below in your browser.
 
 <p align="center">
-<img src="./static/good-beers-ui.png" width="300" alt="Good Beers UI">
+<img src="./static/good-beers-ui.png" width="600" alt="Good Beers UI">
 </p>
 
 ## PWAs with Ionic
