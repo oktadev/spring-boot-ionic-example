@@ -192,7 +192,7 @@ import {
   StormpathConfiguration, StormpathModule, StormpathIonicModule,
   LoginPage, RegisterPage, ForgotPasswordPage
 } from 'angular-stormpath';
-...
+
 export function stormpathConfig(): StormpathConfiguration {
   let spConfig: StormpathConfiguration = new StormpathConfiguration();
   spConfig.endpointPrefix = 'https://raible.apps.stormpath.io';
