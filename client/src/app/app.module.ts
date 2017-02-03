@@ -5,10 +5,10 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
-import { StormpathConfiguration, StormpathModule } from 'angular-stormpath';
-import { LoginPage } from '../pages/auth/login/login';
-import { ForgotPasswordPage } from '../pages/auth/forgot/forgot';
-import { RegisterPage } from '../pages/auth/register/register';
+import {
+  StormpathConfiguration, StormpathModule, StormpathIonicModule, LoginPage,
+  RegisterPage, ForgotPasswordPage
+} from 'angular-stormpath';
 import { BeerPage } from '../pages/beer/beer';
 import { BeerService } from '../providers/beer-service';
 import { GiphyService } from '../providers/giphy-service';
@@ -28,15 +28,13 @@ export function stormpathConfig(): StormpathConfiguration {
     ContactPage,
     HomePage,
     TabsPage,
-    LoginPage,
-    ForgotPasswordPage,
-    RegisterPage,
     BeerPage,
     BeerModalPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
-    StormpathModule
+    StormpathModule,
+    StormpathIonicModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
