@@ -819,7 +819,7 @@ To deploy the app to an iPhone, start by plugging your iOS device into your comp
 
 ```
 npm install -g ios-deploy ios-sim
-ionic build ios
+ionic build ios --prod
 cd platforms/ios/
 open ionic-auth.xcodeproj
 ```
