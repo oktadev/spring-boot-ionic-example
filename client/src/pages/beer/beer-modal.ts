@@ -3,7 +3,6 @@ import { Component, ViewChild } from '@angular/core';
 import { GiphyService } from '../../providers/giphy-service';
 import { NavParams, ViewController, ToastController, NavController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
-import { BeerPage } from './beer';
 
 @Component({
   templateUrl: './beer-modal.html'

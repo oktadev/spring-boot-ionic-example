@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
+import { ModalController, ToastController } from 'ionic-angular';
 import { BeerService } from '../../providers/beer-service';
 import { GiphyService } from '../../providers/giphy-service';
 import { BeerModalPage } from './beer-modal';
@@ -12,8 +12,7 @@ import { BeerModalPage } from './beer-modal';
 export class BeerPage {
   private beers: Array<any>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-              public beerService: BeerService, public giphyService: GiphyService,
+  constructor(public beerService: BeerService, public giphyService: GiphyService,
               public modalCtrl: ModalController, public toastCtrl: ToastController) {
   }
 
