@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
+import { ModalController, ToastController } from 'ionic-angular';
 import { BeerService } from '../../providers/beer-service';
 import { GiphyService } from '../../providers/giphy-service';
 import { BeerModalPage } from './beer-modal';
