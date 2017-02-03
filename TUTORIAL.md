@@ -335,6 +335,8 @@ git commit -m "Add Stormpath"
 
 Run `ionic generate page beer` to create a component and a template to display the list of good beers. 
 
+Add `BeerPage` to the `declarations` and `entryComponent` lists in `app.module.ts`.
+
 Run `ionic generate provider beer-service` to create a service to fetch the beer list from the Spring Boot API.
 
 Change `src/providers/beer-service.ts` to use have a `getGoodBeers()` method.
@@ -363,7 +365,7 @@ export class BeerService {
 }
 ```
 
-Modify `beer.html` to 
+Modify `beer.html` to show the list of beers.
 
 ```html
 <ion-header>
@@ -384,7 +386,7 @@ Modify `beer.html` to
 </ion-content>
 ```
 
-Modify `beer.ts` to import `BeerService` and add as a provider. Call the `getGoodBeers()` method in the `ionViewDidLoad()` lifecycle method.
+Update `beer.ts` to import `BeerService` and add as a provider. Call the `getGoodBeers()` method in the `ionViewDidLoad()` lifecycle method.
 
 ```typescript
 import { Component } from '@angular/core';
