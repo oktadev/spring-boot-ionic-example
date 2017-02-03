@@ -2,6 +2,8 @@
 
 This tutorial shows how to build a secure Spring Boot API with Stormpath. It also shows how to build an Ionic app that securely connects to this API and can be deployed to a mobile device.
 
+**Prerequisites**: Java 8, Node.js, Maven, a [Stormpath Account](https://api.stormpath.com/register), and an `apiKey.properties` file in `~/stormpath/`.
+
 ## Spring Boot API
 
 Create your Spring Boot API project using [start.spring.io](https://start.spring.io).
