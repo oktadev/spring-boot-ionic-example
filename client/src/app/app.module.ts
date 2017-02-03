@@ -6,8 +6,8 @@ import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import {
-  StormpathConfiguration, StormpathModule, StormpathIonicModule, LoginPage,
-  RegisterPage, ForgotPasswordPage
+  StormpathConfiguration, StormpathModule, StormpathIonicModule,
+  LoginPage, RegisterPage, ForgotPasswordPage
 } from 'angular-stormpath';
 import { BeerPage } from '../pages/beer/beer';
 import { BeerService } from '../providers/beer-service';
