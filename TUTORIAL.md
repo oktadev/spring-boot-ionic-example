@@ -393,9 +393,7 @@ See Ionic’s [deploying documentation](https://ionicframework.com/docs/v2/setup
 
 Once you’re configured your phone, computer, and Apple ID to work, you should be able to open the app and see screens like the ones I captured on my iPhone 6s Plus.
 
-|![](static/iphone-login.png)|![](./static/iphone-register.png)|![](./static/iphone-forgot-password.png)|
-
-<img src="static/iphone-login.png" width="200">
+|<img src="./static/iphone-login.png" width="200">|<img src="./static/iphone-register.png" width="200">|<img src="./static/iphone-forgot-password.png" width="200">|
 
 ### Android
 
