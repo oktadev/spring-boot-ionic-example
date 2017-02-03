@@ -322,6 +322,169 @@ The `LoginPage` tries to auto-focus onto the `email` field when it loads. To aut
 <preference name="KeyboardDisplayRequiresUserAction" value="false" />
 ```
 
+Check your changes into Git.
+
+```
+git add .
+git commit -m "Add Stormpath"
+```
+
+## Build a Beer UI
+
+Run `ionic generate page beer` to create a component and a template to display the list of good beers. 
+
+Run `ionic generate provider beer-service` to create a service to fetch the beer list from the Spring Boot API.
+
+Change `src/providers/beer-service.ts` to use have a `getGoodBeers()` method.
+
+```typescript
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs';
+import { StormpathConfiguration } from 'angular-stormpath';
+
+@Injectable()
+export class BeerService {
+  public API;
+  public BEER_API;
+
+  constructor(public http: Http, public config: StormpathConfiguration) {
+    this.API = config.endpointPrefix;
+    this.BEER_API = this.API + '/beers';
+  }
+
+  getGoodBeers(): Observable<any> {
+    return this.http.get(this.API + '/good-beers')
+      .map((response: Response) => response.json());
+  }
+}
+```
+
+Modify `beer.html` to 
+
+```html
+<ion-header>
+  <ion-navbar>
+    <ion-title>Good Beers</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item *ngFor="let beer of beers" >
+      <ion-item>
+        <h2>{{beer.name}}</h2>
+      </ion-item>
+    </ion-item>
+  </ion-list>
+</ion-content>
+```
+
+
+Modify `beer.ts` to
+
+```typescript
+import { Component } from '@angular/core';
+import { BeerService } from '../../providers/beer-service';
+
+@Component({
+  selector: 'page-beer',
+  templateUrl: 'beer.html',
+  providers: [BeerService]
+})
+export class BeerPage {
+  private beers: Array<any>;
+
+  constructor(public beerService: BeerService) {
+  }
+
+  ionViewDidLoad() {
+    this.beerService.getGoodBeers().subscribe(beers => {
+      this.beers = beers;
+    })
+  }
+}
+```
+
+Add some fun with Giphy! Run `ionic generate provider giphy-service`. Replace the code in `src/providers/giphy-service.ts` with the following TypeScript:
+
+```typescript
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs';
+
+@Injectable()
+// http://tutorials.pluralsight.com/front-end-javascript/getting-started-with-angular-2-by-building-a-giphy-search-application
+export class GiphyService {
+
+  giphyApi = 'https://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&q=';
+
+  constructor(public http: Http) {
+  }
+
+  get(searchTerm): Observable<any> {
+    let apiLink = this.giphyApi + searchTerm;
+    return this.http.request(apiLink).map((res: Response) => {
+      let results = res.json().data;
+      if (results.length > 0) {
+        return results[0].images.original.url;
+      } else {
+        return 'https://media.giphy.com/media/YaOxRsmrv9IeA/giphy.gif'; // dancing cat for 404
+      }
+    });
+  }
+}
+```
+
+Update `beer.ts` to take advantage of `GiphyService`:
+
+```typescript
+import { Component } from '@angular/core';
+import { BeerService } from '../../providers/beer-service';
+import { GiphyService } from '../../providers/giphy-service';
+
+@Component({
+  selector: 'page-beer',
+  templateUrl: 'beer.html',
+  providers: [BeerService, GiphyService]
+})
+export class BeerPage {
+  private beers: Array<any>;
+
+  constructor(public beerService: BeerService, public giphyService: GiphyService) {
+  }
+
+  ionViewDidLoad() {
+    this.beerService.getGoodBeers().subscribe(beers => {
+      this.beers = beers;
+      for (let beer of this.beers) {
+        this.giphyService.get(beer.name).subscribe(url => {
+          beer.giphyUrl = url
+        });
+      }
+    })
+  }
+  ...
+}
+```
+
+Update `beer.html` to display the image retrieved:
+
+```html
+<ion-item>
+    <ion-avatar item-left>
+      <img src="{{beer.giphyUrl}}">
+    </ion-avatar>
+    <h2>{{beer.name}}</h2>
+</ion-item>
+```
+
+If everything works as expected, you should see a page similar to the one below in your browser.
+
+![Good Beers UI](./static/good-beers-ui.png)
+
 ## PWAs with Ionic
 
 Ionic 2 ships with support for creating progressive web apps (PWAs). If you’d like to learn more about what PWAs are, see [Navigating the World of Progressive Web Apps with Ionic 2](http://blog.ionic.io/navigating-the-world-of-progressive-web-apps-with-ionic-2/). 
@@ -439,6 +602,6 @@ I’d love to learn how to add [Touch ID](https://ionicframework.com/docs/v2/nat
 
 To learn more about Ionic, Angular, or Stormpath, please see the following resources:
 
-[Get started with Ionic Framework](http://ionicframework.com/getting-started/)
-[Getting Started with Angular](https://www.youtube.com/watch?v=Jq3szz2KOOs) A YouTube webinar by yours truly. ;)
-[Stormpath Client API Guide](https://docs.stormpath.com/client-api/product-guide/latest/) 
+* [Get started with Ionic Framework](http://ionicframework.com/getting-started/)
+* [Getting Started with Angular](https://www.youtube.com/watch?v=Jq3szz2KOOs) A YouTube webinar by yours truly. ;)
+* [Stormpath Client API Guide](https://docs.stormpath.com/client-api/product-guide/latest/) 
