@@ -169,21 +169,21 @@ cd ionic-auth
 ionic serve
 ```
 
-This will open your default browser on (http://localhost:8100). You can use Chrome’s device toolbar to see what the application will look like on most mobile devices.
-
-Stormpath allows you to easily integrate authentication into an Ionic 2 application. It also provides [integration for a number of backend frameworks](https://docs.stormpath.com/), making it easy to verify the JWT you get when logging in. 
+This will open your default browser on [http://localhost:8100](http://localhost:8100). You can click through the tabbed interface to see the default structure of the app.
 
 Thanks to the [recent release of Stormpath's Client API](https://stormpath.com/blog/client-api-authentication-mobile-frontend), you can now authenticate directly without needing to hit your server with a Stormpath SDK integration installed. This article shows you how to do just that in an Ionic application.
 
-Install the [Angular components for Stormpath](https://github.com/stormpath/stormpath-sdk-angular) using npm.
+Install the [Angular components for Stormpath](https://github.com/stormpath/stormpath-sdk-angular):
 
 ```
 yarn add angular-stormpath
 ```
 
-Modify `app.module.ts` to import the appropriate Stormpath classes from `angular-stormpath`. Create a function to configure the `endpointPrefix` to point to the DNS label for your Client API instance. You can find and configure your DNS label by logging into https://api.stormpath.com and navigating to Applications > My Application > Policies > Client API > DNS Label. Since mine is “raible”, I’ll be using `raible.apps.stormpath.io` for this example.
+Modify `app.module.ts` to import the appropriate Stormpath classes from `angular-stormpath`. Create a function to configure the `endpointPrefix` to point to the DNS label for your Client API instance. 
 
-Make sure to specify Stormpath's pre-built Ionic pages in `entryComponents`.
+**NOTE:** You can find and configure your DNS label by logging into https://api.stormpath.com and navigating to Applications > My Application > Policies > Client API > DNS Label. Since mine is “raible”, I’ll be using `raible.apps.stormpath.io` for this example.
+
+Make sure to define `stormpathConfig`, override the provider, import `StormpathModule` / `StormpathIonicModule`, and append Stormpath's pre-built Ionic pages to `entryComponents`.
 
 
 ```typescript
@@ -254,7 +254,7 @@ export class MyApp {
 }
 ```
 
-After making these changes, you can run `ionic serve`, but you’ll likely see something similar to the following error in your browser’s console.
+If you run `ionic serve`, you’ll likely see something similar to the following error in your browser’s console.
 
 ```
 XMLHttpRequest cannot load https://raible.apps.stormpath.io/me. Response to preflight request
@@ -263,7 +263,7 @@ the requested resource. Origin 'http://localhost:8100 is therefore not allowed a
 The response had HTTP status code 403.
 ```
 
-To fix this, you’ll need to login to https://api.stormpath.com, and navigate to Applications > My Application, and modify the **Authorized Origin URIs** to include `http://localhost:8100`. 
+To fix this, you’ll need to login to https://api.stormpath.com, navigate to Applications > My Application, and modify the **Authorized Origin URIs** to include `http://localhost:8100`. 
 
 At this point, you should see a login screen when you run `ionic serve`.
 
@@ -329,7 +329,7 @@ git add .
 git commit -m "Add Stormpath"
 ```
 
-## Build a Beer UI
+## Build a Good Beers UI
 
 Run `ionic generate page beer` to create a component and a template to display the list of good beers. 
 
@@ -593,10 +593,10 @@ See Ionic’s [deploying documentation](https://ionicframework.com/docs/v2/setup
 
 Once you’re configured your phone, computer, and Apple ID to work, you should be able to open the app and see screens like the ones I captured on my iPhone 6s Plus.
 
-<div style="text-align: center">
-<img src="./static/iphone-login.png" width="250">
-<img src="./static/iphone-register.png" width="250" style="margin-left: 20px">
-<img src="./static/iphone-forgot-password.png" width="250" style="margin-left: 20px">
+<p align="center">
+<img src="./static/iphone-login.png" width="250">&nbsp;&nbsp;
+<img src="./static/iphone-register.png" width="250">&nbsp;&nbsp;
+<img src="./static/iphone-forgot-password.png" width="250">
 </div>
 
 ### Android
@@ -633,9 +633,7 @@ Skin: Skin with dynamic hardware controls
 After performing these steps, I was able to run `ionic emulate android` and see my app running in the AVD.
 
 ## Learn More
-I hope you’ve enjoyed this tour of Ionic, Angular, and Stormpath. I like how Ionic takes your web development skills up a notch and allows you to create mobile applications that look and behave natively. They look great and have swift performance.
-
-I’d love to learn how to add [Touch ID](https://ionicframework.com/docs/v2/native/touchid/) or [1Password support](https://github.com/AgileBits/onepassword-app-extension) to an Ionic app with Stormpath authentication. One of the biggest pain points as a user is having to enter in usernames and passwords on a mobile application. While Stormpath’s use of OAuth 2’s access and refresh tokens helps alleviate the problem, I do like the convenience of leveraging my phone and app’s capabilities.
+I hope you’ve enjoyed this tour of Ionic, Angular, and Stormpath. I like how Ionic takes your web development skills up a notch and allows you to create mobile applications that look and behave natively.
 
 To learn more about Ionic, Angular, or Stormpath, please see the following resources:
 
