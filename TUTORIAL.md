@@ -384,7 +384,7 @@ Modify `beer.html` to
 </ion-content>
 ```
 
-Modify `beer.ts` to be
+Modify `beer.ts` to import `BeerService` and add as a provider. Call the `getGoodBeers()` method in the `ionViewDidLoad()` lifecycle method.
 
 ```typescript
 import { Component } from '@angular/core';
@@ -431,7 +431,6 @@ export class TabsPage {
   tab4Root: any = AboutPage;
 
   constructor() {
-
   }
 }
 ```
@@ -505,7 +504,6 @@ export class BeerPage {
       }
     })
   }
-  ...
 }
 ```
 
@@ -525,6 +523,239 @@ If everything works as expected, you should see a page similar to the one below 
 <p align="center">
 <img src="./static/good-beers-ui.png" width="600" alt="Good Beers UI">
 </p>
+
+### Add a Modal for Editing
+
+Change the header in `beer.html` to have a button that opens a modal to add a new beer.
+
+```html
+<ion-header>
+  <ion-navbar>
+    <ion-title>Good Beers</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="openModal()" color="primary">
+        <ion-icon name="add-circle"></ion-icon>
+        <ion-icon name="beer"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+```
+
+In this same file, change `<ion-item>` to have a click handler for opening the modal for the current item.
+
+```html
+<ion-item (click)="openModal({id: beer.id})">
+```
+
+Add `ModalController` as a dependency in `BeerPage` and add an `openModal()` method.
+
+```typescript
+export class BeerPage {
+  private beers: Array<any>;
+
+  constructor(public beerService: BeerService, public giphyService: GiphyService,
+              public modalCtrl: ModalController) {
+  }
+
+  // ionViewDidLoad method
+
+  openModal(beerId) {
+    let modal = this.modalCtrl.create(BeerModalPage, beerId);
+    modal.present();
+    // refresh data after modal dismissed
+    modal.onDidDismiss(() => this.ionViewDidLoad())
+  }
+}
+```
+
+This won't compile because `BeerModalPage` doesn't exist. Create `beer-modal.ts` in the same directory. This page will retrieve the beer from the `beerId` that's passed in. It will render the name, allow it to be edited, and show the Giphy image found for the name.
+
+```typescript
+import { BeerService } from '../../providers/beer-service';
+import { Component, ViewChild } from '@angular/core';
+import { GiphyService } from '../../providers/giphy-service';
+import { NavParams, ViewController, ToastController, NavController } from 'ionic-angular';
+import { NgForm } from '@angular/forms';
+
+@Component({
+  templateUrl: './beer-modal.html'
+})
+export class BeerModalPage {
+  @ViewChild('name') name;
+  beer: any = {};
+  error: any;
+
+  constructor(public beerService: BeerService,
+              public giphyService: GiphyService,
+              public params: NavParams,
+              public viewCtrl: ViewController,
+              public toastCtrl: ToastController,
+              public navCtrl: NavController) {
+    if (this.params.data.id) {
+      this.beerService.get(this.params.get('id')).subscribe(beer => {
+        this.beer = beer;
+        this.beer.href = beer._links.self.href;
+        this.giphyService.get(beer.name).subscribe(url => beer.giphyUrl = url);
+      });
+    }
+  }
+
+  dismiss() {
+    this.viewCtrl.dismiss();
+  }
+
+  save(form: NgForm) {
+    let update: boolean = form['href'];
+    this.beerService.save(form).subscribe(result => {
+      let toast = this.toastCtrl.create({
+        message: 'Beer "' + form.name + '" ' + ((update) ? 'updated' : 'added') + '.',
+        duration: 2000
+      });
+      toast.present();
+      this.dismiss();
+    }, error => this.error = error)
+  }
+
+  ionViewDidLoad() {
+    setTimeout(() => {
+      this.name.setFocus();
+    },150);
+  }
+}
+```
+
+Create `beer-modal.html` as a template for this page.
+
+```html
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{beer ? 'Beer Details' : 'Add Beer'}}
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <span ion-text color="primary" showWhen="ios,core">Cancel</span>
+        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <form #beerForm="ngForm" (ngSubmit)="save(beerForm.value)">
+    <input type="hidden" name="href" [(ngModel)]="beer.href">
+    <ion-row>
+      <ion-col>
+        <ion-list inset>
+          <ion-item>
+            <ion-input placeholder="Beer Name" name="name" type="text"
+                       required [(ngModel)]="beer.name" #name></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col *ngIf="beer" text-center>
+        <img src="{{beer.giphyUrl}}">
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+        <button ion-button color="primary" full type="submit"
+                [disabled]="!beerForm.form.valid">Save</button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>
+```
+
+Add `BeerModalPage` to the `declarations` and `entryComponent` lists in `app.module.ts`.
+
+You'll also need to modify `beer-service.ts` to have `get()` and `save()` methods.
+
+```typescript
+get(id: string) {
+  return this.http.get(this.BEER_API + '/' + id)
+    .map((response: Response) => response.json());
+}
+
+save(beer: any): Observable<any> {
+  let result: Observable<Response>;
+  if (beer['href']) {
+    result = this.http.put(beer.href, beer);
+  } else {
+    result = this.http.post(this.BEER_API, beer)
+  }
+  return result.map((response: Response) => response.json())
+    .catch(error => Observable.throw(error));
+}
+```
+
+### Add Swipe to Delete
+
+To add swipe-to-delete functionality on the list of beers, open `beer.html` and make it so `<ion-item-sliding>` wraps `<ion-item>` and contains the `*ngFor`. Add a delete button using `<ion-item-options>`.
+
+```html
+<ion-content padding>
+  <ion-list>
+    <ion-item-sliding *ngFor="let beer of beers" >
+      <ion-item (click)="openModal({id: beer.id})">
+        <ion-avatar item-left>
+          <img src="{{beer.giphyUrl}}">
+        </ion-avatar>
+        <h2>{{beer.name}}</h2>
+      </ion-item>
+      <ion-item-options>
+        <button ion-button color="danger" (click)="remove(beer)"><ion-icon name="trash"></ion-icon> Delete</button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>
+```
+
+Add a `remove()` method to `beer.ts`. 
+
+```typescript
+remove(beer) {
+  this.beerService.remove(beer.id).subscribe(response => {
+    for (let i = 0; i < this.beers.length; i++) {
+      if (this.beers[i] === beer) {
+        this.beers.splice(i, 1);
+        let toast = this.toastCtrl.create({
+          message: 'Beer "' + beer.name + '" deleted.',
+          duration: 2000,
+          position: 'top'
+        });
+        toast.present();
+      }
+    }
+  });
+}
+```
+
+Add `toastCtrl` as a dependency in the constructor so everything compiles.
+
+```typescript
+constructor(public beerService: BeerService, public giphyService: GiphyService,
+          public modalCtrl: ModalController, public toastCtrl: ToastController) {
+}
+```
+
+You'll also need to modify `beer-service.ts` to have a `remove()` method.
+
+```typescript
+remove(id: string) {
+  return this.http.delete(this.BEER_API + '/' + id)
+    .map((response: Response) => response.json());
+}
+```
+
+After making these additions, you should be able to add, edit and delete beers.
+
+<p align="center">
+<img src="./static/beer-modal.png" width="350">&nbsp;&nbsp;
+<img src="./static/beer-delete.png" width="350">
+</div>
 
 ## PWAs with Ionic
 
