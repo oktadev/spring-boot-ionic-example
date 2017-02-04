@@ -153,7 +153,7 @@ public class BeerController {
 
 Access the API using `http localhost:8080/good-beers --auth <user>:<password>`.
 
-## Ionic App
+## Create Ionic App
 
 Install Ionic and Cordova: `yarn global add cordova ionic`
 
@@ -174,24 +174,43 @@ This will open your default browser on [http://localhost:8100](http://localhost:
 
 Thanks to the [recent release of Stormpath's Client API](https://stormpath.com/blog/client-api-authentication-mobile-frontend), you can now authenticate directly without needing to hit your server with a Stormpath SDK integration installed. This article shows you how to do just that in an Ionic application.
 
-Install the [Angular components for Stormpath](https://github.com/stormpath/stormpath-sdk-angular):
+## Upgrade to Angular 2.3
+
+With Angular versions less than 2.3, you can’t extend components and override their templates. The Ionic pages for Stormpath module uses component extension to override the templates in its pages. Because of this, you have to upgrade your project to use Angular 2.3. The only downside to use Angular 2.3 with Ionic 2.0.0 is that you won’t be able to use the `--prod` build flag when compiling. This is because its compiler does not support Angular 2.3. 
+
+To begin, modify `package.json` so all the `angular` dependencies use version `2.3.1` rather than `2.2.1`. 
+
+```json
+"dependencies": {
+  "@angular/common": "2.3.1",
+  "@angular/compiler": "2.3.1",
+  "@angular/compiler-cli": "2.3.1",
+  "@angular/core": "2.3.1",
+  "@angular/forms": "2.3.1",
+  "@angular/http": "2.3.1",
+  "@angular/platform-browser": "2.3.1",
+  "@angular/platform-browser-dynamic": "2.3.1",
+  "@angular/platform-server": "2.3.1",
+  ...
+```
+
+Run `npm install` to update to these versions.
+
+## Install Ionic Pages for Stormpath
+
+Install [Ionic pages for Stormpath](https://github.com/stormpath/stormpath-sdk-angular-ionic):
 
 ```
-yarn add angular-stormpath
+yarn add angular-stormpath-ionic
 ```
 
-Modify `app.module.ts` to import the appropriate Stormpath classes from `angular-stormpath`. Create a function to configure the `endpointPrefix` to point to the DNS label for your Client API instance. 
+Modify `src/app/app.module.ts` to define a `stormpathConfig` function. This function is used to configure the `endpointPrefix` to point to the DNS label for your Client API instance. Import `StormpathModule`, `StormpathIonicModule`, and override the instance of `StormpathConfiguration`. You’ll also need to append Stormpath's pre-built Ionic pages to `entryComponents`.
 
 **NOTE:** You can find and configure your DNS label by logging into https://api.stormpath.com and navigating to Applications > My Application > Policies > Client API > DNS Label. Since mine is “raible”, I’ll be using `raible.apps.stormpath.io` for this example.
 
-Make sure to define `stormpathConfig`, override the provider, import `StormpathModule` / `StormpathIonicModule`, and append Stormpath's pre-built Ionic pages to `entryComponents`.
-
-
 ```typescript
-import {
-  StormpathConfiguration, StormpathModule, StormpathIonicModule,
-  LoginPage, RegisterPage, ForgotPasswordPage
-} from 'angular-stormpath';
+import { StormpathConfiguration, StormpathModule } from 'angular-stormpath';
+import { StormpathIonicModule, LoginPage, ForgotPasswordPage, RegisterPage } from 'angular-stormpath-ionic';
 
 export function stormpathConfig(): StormpathConfiguration {
   let spConfig: StormpathConfiguration = new StormpathConfiguration();
@@ -221,14 +240,15 @@ export function stormpathConfig(): StormpathConfiguration {
 export class AppModule {}
 ```
 
-To render a login page before users can view the application, you can modify `src/app/app.component.ts` to use the `Stormpath` service and navigate to Stormpath's `LoginPage` if the user is not authenticated. 
+To render a login page before users can view the application, modify `src/app/app.component.ts` to use the `Stormpath` service and navigate to Stormpath's `LoginPage` if the user is not authenticated. 
 
 ```typescript
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 import { TabsPage } from '../pages/tabs/tabs';
-import { Stormpath, LoginPage } from 'angular-stormpath';
+import { Stormpath } from 'angular-stormpath';
+import { LoginPage } from 'angular-stormpath-ionic';
 
 @Component({
   templateUrl: 'app.html'
