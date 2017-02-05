@@ -408,9 +408,7 @@ Modify `beer.html` to show the list of beers.
 <ion-content padding>
   <ion-list>
     <ion-item *ngFor="let beer of beers" >
-      <ion-item>
-        <h2>{{beer.name}}</h2>
-      </ion-item>
+      <h2>{{beer.name}}</h2>
     </ion-item>
   </ion-list>
 </ion-content>
@@ -542,11 +540,11 @@ export class BeerPage {
 Update `beer.html` to display the image retrieved:
 
 ```html
-<ion-item>
-    <ion-avatar item-left>
-      <img src="{{beer.giphyUrl}}">
-    </ion-avatar>
-    <h2>{{beer.name}}</h2>
+<ion-item *ngFor="let beer of beers">
+  <ion-avatar item-left>
+    <img src="{{beer.giphyUrl}}">
+  </ion-avatar>
+  <h2>{{beer.name}}</h2>
 </ion-item>
 ```
 
@@ -576,12 +574,14 @@ Change the header in `beer.html` to have a button that opens a modal to add a ne
 In this same file, change `<ion-item>` to have a click handler for opening the modal for the current item.
 
 ```html
-<ion-item (click)="openModal({id: beer.id})">
+<ion-item *ngFor="let beer of beers" (click)="openModal({id: beer.id})">
 ```
 
 Add `ModalController` as a dependency in `BeerPage` and add an `openModal()` method.
 
 ```typescript
+import { ModalController } from 'ionic-angular';
+
 export class BeerPage {
   private beers: Array<any>;
 
@@ -589,7 +589,7 @@ export class BeerPage {
               public modalCtrl: ModalController) {
   }
 
-  // ionViewDidLoad method
+  // ionViewDidLoad()
 
   openModal(beerId) {
     let modal = this.modalCtrl.create(BeerModalPage, beerId);
@@ -721,6 +721,13 @@ save(beer: any): Observable<any> {
   return result.map((response: Response) => response.json())
     .catch(error => Observable.throw(error));
 }
+```
+
+This won't work because `/beers` is not an auto-authorized URI. To fix this, add this URI as to the StormpathConfiguration in `src/app/app.module.ts`.
+
+```typescript
+spConfig.autoAuthorizedUris.push(new RegExp('http://localhost:8080/good-beers'));
+spConfig.autoAuthorizedUris.push(new RegExp('http://localhost:8080/beers'));
 ```
 
 ### Add Swipe to Delete
