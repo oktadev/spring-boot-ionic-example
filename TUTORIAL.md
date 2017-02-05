@@ -863,7 +863,7 @@ open ionic-auth.xcodeproj
 
 Select your phone as the target in Xcode and click the play button to run your app. The first time you do this, Xcode may spin for a while with a “Processing symbol files” message at the top.
 
-Deploying to your phone will likely fail because it won't be able to connect to `http://localhost:8080`. To fix this, copy [this script](./deploy.sh) to your hard drive. It expects to be in a directory above your apps and that your apps are named `client` and `server`. 
+Deploying to your phone will likely fail because it won't be able to connect to `http://localhost:8080`. To fix this, copy [this script](./deploy.sh) to your hard drive. It expects to be in a directory above your apps. It also expects your apps to be named `client` and `server`. 
 
 If you don't have a Cloud Foundry account, you'll need to [create one](https://account.run.pivotal.io/z/uaa/sign-up) and install its command line tools for this script to work.
 
@@ -871,13 +871,13 @@ If you don't have a Cloud Foundry account, you'll need to [create one](https://a
 brew tap cloudfoundry/tap && brew install cf-cli
 ```
 
-Once you’re configured your phone, computer, and Apple ID to work, you should be able to open the app and see screens like the ones I captured on my iPhone 6s Plus.
+Once you’re configured your phone, computer, and Apple ID to work, you should be able to open the app and see all the screens you created. Below are the ones the ones I captured on my iPhone 6s Plus.
 
 <p align="center">
 <img src="./static/iphone-login.png" width="250">&nbsp;&nbsp;
 <img src="./static/iphone-register.png" width="250">&nbsp;&nbsp;
 <img src="./static/iphone-forgot-password.png" width="250">
-</div>
+</p>
 
 ### Android
 
