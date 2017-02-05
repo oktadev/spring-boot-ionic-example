@@ -1,6 +1,12 @@
 # Spring Boot, Ionic, and Stormpath
 
-This tutorial shows how to build a secure Spring Boot API with Stormpath. It also shows how to build an Ionic app that securely connects to this API and can be deployed to a mobile device.
+<style type="text/css">
+.highlight-source-java, .highlight-source-ts, .highlight-text-html-basic {
+  display: none
+}
+</style>
+
+This demo script shows Matt's IntelliJ Live Template shortcuts to build an Ionic and Spring Boot app.
 
 **Prerequisites**: Java 8, Node.js, Maven, a [Stormpath Account](https://api.stormpath.com/register), and an `apiKey.properties` file in `~/stormpath/`.
 
@@ -9,7 +15,7 @@ This tutorial shows how to build a secure Spring Boot API with Stormpath. It als
 Create your Spring Boot API project using [start.spring.io](https://start.spring.io).
 
 ```
-http https://start.spring.io/starter.zip \
+http https://start.spring.io/starter.zip \/
 dependencies==data-jpa,data-rest,h2,web,devtools,security,stormpath -d
 ```
 
@@ -811,16 +817,9 @@ constructor(public beerService: BeerService, public giphyService: GiphyService,
 
 After making these additions, you should be able to add, edit and delete beers.
 
-<p align="center">
-<img src="./static/beer-modal.png" width="350">&nbsp;&nbsp;
-<img src="./static/beer-delete.png" width="350">
-</div>
-
 ## PWAs with Ionic
 
-Ionic 2 ships with support for creating progressive web apps (PWAs). If you’d like to learn more about what PWAs are, see [Navigating the World of Progressive Web Apps with Ionic 2](http://blog.ionic.io/navigating-the-world-of-progressive-web-apps-with-ionic-2/). 
-
-If you run the [Lighthouse Chrome extension](https://developers.google.com/web/tools/lighthouse/) on this application, you’ll get a mediocre score (54/100).
+Ionic 2 ships with support for creating progressive web apps (PWAs). Run the [Lighthouse Chrome extension](https://developers.google.com/web/tools/lighthouse/) on this application.
 
 To register a service worker, and improve the app’s score, uncomment the following block in `index.html`.
 
