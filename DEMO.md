@@ -13,9 +13,7 @@ http https://start.spring.io/starter.zip \/
 dependencies==data-jpa,data-rest,h2,web,devtools,security,stormpath -d
 ```
 
-Run the application with `./mvnw spring-boot:run`.
-
-Create a `Beer` entity class in `src/main/java/com/example/beer`. 
+Run the application with `./mvnw spring-boot:run`. Create a `Beer` entity class in `src/main/java/com/example/beer`. 
 
 → **boot-entity**
 
