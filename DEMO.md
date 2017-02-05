@@ -1,11 +1,5 @@
 # Spring Boot, Ionic, and Stormpath
 
-<style type="text/css">
-.highlight-source-java, .highlight-source-ts, .highlight-text-html-basic {
-  display: none
-}
-</style>
-
 This demo script shows Matt's IntelliJ Live Template shortcuts to build an Ionic and Spring Boot app.
 
 **Prerequisites**: Java 8, Node.js, Maven, a [Stormpath Account](https://api.stormpath.com/register), and an `apiKey.properties` file in `~/stormpath/`.
