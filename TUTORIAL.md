@@ -203,9 +203,7 @@ Install [Ionic pages for Stormpath](https://github.com/stormpath/stormpath-sdk-a
 yarn add angular-stormpath-ionic
 ```
 
-Modify `src/app/app.module.ts` to define a `stormpathConfig` function. This function is used to configure the `endpointPrefix` to point to the DNS label for your Client API instance. Import `StormpathModule`, `StormpathIonicModule`, and override the instance of `StormpathConfiguration`. You’ll also need to append Stormpath's pre-built Ionic pages to `entryComponents`.
-
-**NOTE:** You can find and configure your DNS label by logging into https://api.stormpath.com and navigating to Applications > My Application > Policies > Client API > DNS Label. Since mine is “raible”, I’ll be using `raible.apps.stormpath.io` for this example.
+Modify `src/app/app.module.ts` to define a `stormpathConfig` function. This function is used to configure the `endpointPrefix` to point to your Spring Boot API. Import `StormpathModule`, `StormpathIonicModule`, and override the instance of `StormpathConfiguration`. You’ll also need to append Stormpath's pre-built Ionic pages to `entryComponents`.
 
 ```typescript
 import { StormpathConfiguration, StormpathModule } from 'angular-stormpath';
@@ -213,7 +211,7 @@ import { StormpathIonicModule, LoginPage, ForgotPasswordPage, RegisterPage } fro
 
 export function stormpathConfig(): StormpathConfiguration {
   let spConfig: StormpathConfiguration = new StormpathConfiguration();
-  spConfig.endpointPrefix = 'https://raible.apps.stormpath.io';
+  spConfig.endpointPrefix = 'http://localhost:8080';
   return spConfig;
 }
 
