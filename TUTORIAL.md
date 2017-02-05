@@ -281,9 +281,13 @@ the requested resource. Origin 'http://localhost:8100 is therefore not allowed a
 The response had HTTP status code 403.
 ```
 
-To fix this, you’ll need to login to https://api.stormpath.com, navigate to Applications > My Application, and modify the **Authorized Origin URIs** to include `http://localhost:8100`. 
+To fix this, open your Spring Boot application's `src/main/resources/application.properties` and add the following line. This enables cross-origin resource sharing (CORS) from both the browser and the mobile client. 
 
-At this point, you should see a login screen when you run `ionic serve`.
+```
+stormpath.web.cors.allowed.originUris = http://localhost:8100,file://
+```
+
+Restart Spring Boot and your Ionic app. You should see a login screen when you run `ionic serve`.
 
 ![Stormpath Login for Ionic](./static/ionic-login.png)
 
