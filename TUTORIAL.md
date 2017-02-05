@@ -193,7 +193,7 @@ To begin, modify `package.json` so all the `angular` dependencies use version `2
   "@angular/platform-server": "2.3.1",
 ```
 
-Run `npm install` to update to these versions.
+Run `yarn` to update to these versions.
 
 ## Install Ionic Pages for Stormpath
 
