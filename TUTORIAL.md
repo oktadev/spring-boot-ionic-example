@@ -9,7 +9,7 @@ This tutorial shows how to build a secure Spring Boot API with Stormpath. It als
 Create your Spring Boot API project using [start.spring.io](https://start.spring.io).
 
 ```
-http https://start.spring.io/starter.zip \
+http https://start.spring.io/starter.zip \/
 dependencies==data-jpa,data-rest,h2,web,devtools,security,stormpath -d
 ```
 
@@ -160,13 +160,13 @@ Install Ionic and Cordova: `yarn global add cordova ionic`
 From a terminal window, create a new application using the following command:
 
 ```
-ionic start ionic-auth --v2
+ionic start ionic-beer --v2
 ```
 
 This may take a minute or two to complete, depending on your internet connection speed. In the same terminal window, change to be in your application’s directory and run it.
 
 ```
-cd ionic-auth
+cd ionic-beer
 ionic serve
 ```
 
@@ -858,7 +858,7 @@ To deploy the app to an iPhone, start by plugging your iOS device into your comp
 npm install -g ios-deploy ios-sim
 ionic build ios
 cd platforms/ios/
-open ionic-auth.xcodeproj
+open ionic-beer.xcodeproj
 ```
 
 Select your phone as the target in Xcode and click the play button to run your app. The first time you do this, Xcode may spin for a while with a “Processing symbol files” message at the top.
@@ -885,7 +885,7 @@ To emulate or deploy to an Android device, you’ll first need to install [Andro
 
 Make sure to open Android Studio to complete the installation.
 
-To deploy to the Android emulator, add support for it to the ionic-auth project using the `ionic` command.
+To deploy to the Android emulator, add support for it to the ionic-beer project using the `ionic` command.
 
 ```
 ionic platform add android
