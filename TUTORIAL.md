@@ -852,18 +852,24 @@ You’ll need to run `ionic emulate ios` to open your app in Simulator.
 
 The biggest problem I found when running the app in Simulator was that it was difficult to get the keyboard to popup. To workaround this, I used Edit > Hardware > Keyboard > Toggle Software Keyboard when I needed to type text in a field.
 
-To deploy the app to an iPhone, start by plugging your iOS device into your computer. Then run the following commands to install ios-deploy/ios-sim, build the app, and run it on your device.
+To deploy the app to an iPhone, start by plugging your iOS device into your computer. Then run the following commands to install ios-deploy/ios-sim, build the app, and run it on your device. If you've 
 
 ```
 npm install -g ios-deploy ios-sim
-ionic build ios --prod
+ionic build ios
 cd platforms/ios/
 open ionic-auth.xcodeproj
 ```
 
 Select your phone as the target in Xcode and click the play button to run your app. The first time you do this, Xcode may spin for a while with a “Processing symbol files” message at the top.
 
-See Ionic’s [deploying documentation](https://ionicframework.com/docs/v2/setup/deploying/) for information on code signing and trusting the app’s certificate.
+Deploying to your phone will likely fail because it won't be able to connect to `http://localhost:8080`. To fix this, copy [this script](./deploy.sh) to your hard drive. It expects to be in a directory above your apps and that your apps are named `client` and `server`. 
+
+If you don't have a Cloud Foundry account, you'll need to [create one](https://account.run.pivotal.io/z/uaa/sign-up) and install its command line tools for this script to work.
+
+```
+brew tap cloudfoundry/tap && brew install cf-cli
+```
 
 Once you’re configured your phone, computer, and Apple ID to work, you should be able to open the app and see screens like the ones I captured on my iPhone 6s Plus.
 
