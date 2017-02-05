@@ -361,7 +361,7 @@ Change `src/providers/beer-service.ts` to use have a `getGoodBeers()` method.
 
 ```typescript
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs';
 import { StormpathConfiguration } from 'angular-stormpath';
@@ -377,9 +377,21 @@ export class BeerService {
   }
 
   getGoodBeers(): Observable<any> {
-    return this.http.get(this.API + '/good-beers')
+    let options = new RequestOptions({ withCredentials: true });
+    return this.http.get(this.API + '/good-beers', options)
       .map((response: Response) => response.json());
   }
+}
+```
+
+**TIP:** If you don’t want to pass in `withCredentials: true`, you can add the API URI as an `autoAuthorizeUri` in `StormpathConfiguration`.
+
+```typescript
+export function stormpathConfig(): StormpathConfiguration {
+  let spConfig: StormpathConfiguration = new StormpathConfiguration();
+  spConfig.endpointPrefix = 'http://localhost:8080';
+  spConfig.autoAuthorizedUris.push(new RegExp('http://localhost:8080/good-beers'));
+  return spConfig;
 }
 ```
 
