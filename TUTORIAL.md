@@ -737,7 +737,7 @@ To add swipe-to-delete functionality on the list of beers, open `beer.html` and 
 ```html
 <ion-content padding>
   <ion-list>
-    <ion-item-sliding *ngFor="let beer of beers" >
+    <ion-item-sliding *ngFor="let beer of beers">
       <ion-item (click)="openModal({id: beer.id})">
         <ion-avatar item-left>
           <img src="{{beer.giphyUrl}}">
