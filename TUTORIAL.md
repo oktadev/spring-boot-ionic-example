@@ -794,7 +794,7 @@ After making these additions, you should be able to add, edit and delete beers.
 <p align="center">
 <img src="./static/beer-modal.png" width="350">&nbsp;&nbsp;
 <img src="./static/beer-delete.png" width="350">
-</div>
+</p>
 
 ## PWAs with Ionic
 
