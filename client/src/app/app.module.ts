@@ -5,10 +5,8 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
-import {
-  StormpathConfiguration, StormpathModule, StormpathIonicModule,
-  LoginPage, RegisterPage, ForgotPasswordPage
-} from 'angular-stormpath';
+import { StormpathConfiguration, StormpathModule } from 'angular-stormpath';
+import { StormpathIonicModule, LoginPage, RegisterPage, ForgotPasswordPage } from 'angular-stormpath-ionic';
 import { BeerPage } from '../pages/beer/beer';
 import { BeerService } from '../providers/beer-service';
 import { GiphyService } from '../providers/giphy-service';
@@ -17,7 +15,7 @@ import { BeerModalPage } from '../pages/beer/beer-modal';
 export function stormpathConfig(): StormpathConfiguration {
   let spConfig: StormpathConfiguration = new StormpathConfiguration();
   spConfig.endpointPrefix = 'http://localhost:8080';
-  spConfig.autoAuthorizedUris.push(new RegExp('http://localhost:8080/*'));
+  spConfig.autoAuthorizedUris.push(new RegExp(spConfig.endpointPrefix + '/*'));
   return spConfig;
 }
 

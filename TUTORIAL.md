@@ -176,9 +176,9 @@ Thanks to the [recent release of Stormpath's Client API](https://stormpath.com/b
 
 ## Upgrade to Angular 2.3
 
-With Angular versions less than 2.3, you can’t extend components and override their templates. The Ionic pages for Stormpath module uses component extension to override the templates in its pages. Because of this, you have to upgrade your project to use Angular 2.3. The only downside to use Angular 2.3 with Ionic 2.0.0 is that you won’t be able to use the `--prod` build flag when compiling. This is because its compiler does not support Angular 2.3. 
+With Angular versions less than 2.3, you can’t extend components and override their templates. The Ionic pages for Stormpath module uses component extension to override the templates in its pages. Because of this, you have to upgrade your project to use Angular 2.3. The only downside to use Angular 2.3 with Ionic 2.0.0 is that you won’t be able to use the `--prod` build flag when compiling. This is because its compiler does not support Angular 2.3.
 
-To begin, modify `package.json` so all the `angular` dependencies use version `2.3.1` rather than `2.2.1`. 
+To begin, modify `package.json` so all the `angular` dependencies use version `2.3.1` rather than `2.2.1`.
 
 ```json
 "dependencies": {
@@ -237,7 +237,7 @@ export function stormpathConfig(): StormpathConfiguration {
 export class AppModule {}
 ```
 
-To render a login page before users can view the application, modify `src/app/app.component.ts` to use the `Stormpath` service and navigate to Stormpath's `LoginPage` if the user is not authenticated. 
+To render a login page before users can view the application, modify `src/app/app.component.ts` to use the `Stormpath` service and navigate to Stormpath's `LoginPage` if the user is not authenticated.
 
 ```typescript
 import { Component } from '@angular/core';
@@ -276,12 +276,12 @@ If you run `ionic serve`, you’ll likely see something similar to the following
 
 ```
 XMLHttpRequest cannot load https://raible.apps.stormpath.io/me. Response to preflight request
-doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on 
-the requested resource. Origin 'http://localhost:8100 is therefore not allowed access. 
+doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on
+the requested resource. Origin 'http://localhost:8100 is therefore not allowed access.
 The response had HTTP status code 403.
 ```
 
-To fix this, open your Spring Boot application's `src/main/resources/application.properties` and add the following line. This enables cross-origin resource sharing (CORS) from both the browser and the mobile client. 
+To fix this, open your Spring Boot application's `src/main/resources/application.properties` and add the following line. This enables cross-origin resource sharing (CORS) from both the browser and the mobile client.
 
 ```
 stormpath.web.cors.allowed.originUris = http://localhost:8100,file://
@@ -351,7 +351,7 @@ git commit -m "Add Stormpath"
 
 ## Build a Good Beers UI
 
-Run `ionic generate page beer` to create a component and a template to display the list of good beers. 
+Run `ionic generate page beer` to create a component and a template to display the list of good beers.
 
 Add `BeerPage` to the `declarations` and `entryComponent` lists in `app.module.ts`.
 
@@ -390,7 +390,7 @@ export class BeerService {
 export function stormpathConfig(): StormpathConfiguration {
   let spConfig: StormpathConfiguration = new StormpathConfiguration();
   spConfig.endpointPrefix = 'http://localhost:8080';
-  spConfig.autoAuthorizedUris.push(new RegExp('http://localhost:8080/good-beers'));
+  spConfig.autoAuthorizedUris.push(new RegExp(spConfig.endpointPrefix + '/*'));
   return spConfig;
 }
 ```
@@ -752,7 +752,7 @@ To add swipe-to-delete functionality on the list of beers, open `beer.html` and 
 </ion-content>
 ```
 
-Add a `remove()` method to `beer.ts`. 
+Add a `remove()` method to `beer.ts`.
 
 ```typescript
 remove(beer) {
@@ -798,7 +798,7 @@ After making these additions, you should be able to add, edit and delete beers.
 
 ## PWAs with Ionic
 
-Ionic 2 ships with support for creating progressive web apps (PWAs). If you’d like to learn more about what PWAs are, see [Navigating the World of Progressive Web Apps with Ionic 2](http://blog.ionic.io/navigating-the-world-of-progressive-web-apps-with-ionic-2/). 
+Ionic 2 ships with support for creating progressive web apps (PWAs). If you’d like to learn more about what PWAs are, see [Navigating the World of Progressive Web Apps with Ionic 2](http://blog.ionic.io/navigating-the-world-of-progressive-web-apps-with-ionic-2/).
 
 If you run the [Lighthouse Chrome extension](https://developers.google.com/web/tools/lighthouse/) on this application, you’ll get a mediocre score (54/100).
 
@@ -817,9 +817,9 @@ To register a service worker, and improve the app’s score, uncomment the follo
 
 After making this change, the score should improve. In my tests, it increased to 69/100. The remaining issues were:
 
-* The page body should render some content if its scripts are not available. This could likely be solved with [Angular’s app-shell directives](https://www.npmjs.com/package/@angular/app-shell). 
+* The page body should render some content if its scripts are not available. This could likely be solved with [Angular’s app-shell directives](https://www.npmjs.com/package/@angular/app-shell).
 * Site is not on HTTPS and does not redirect HTTP to HTTPS.
-* A couple -1’s in performance for "Cannot read property 'ts' of undefined”. 
+* A couple -1’s in performance for "Cannot read property 'ts' of undefined”.
 
 If you refresh the app and Chrome doesn’t prompt you to install the app (a PWA feature), you probably need to turn on a couple of features. Copy and paste the following URLs into Chrome and enable each feature.
 
@@ -834,7 +834,7 @@ After enabling these flags, you’ll see an error in your browser’s console ab
 
 It’s pretty cool that you’re able to develop mobile apps with Ionic in your browser. However, it’s nice to see the fruits of your labor and see how awesome your app looks on a phone. It really does look and behave like a native app!
 
-To see how your application will look on different devices you can run `ionic serve --lab`. The `--lab` flag opens opens a page in your browser that lets you see how your app looks on different devices. 
+To see how your application will look on different devices you can run `ionic serve --lab`. The `--lab` flag opens opens a page in your browser that lets you see how your app looks on different devices.
 
 ### iOS
 
@@ -852,7 +852,7 @@ You’ll need to run `ionic emulate ios` to open your app in Simulator.
 
 The biggest problem I found when running the app in Simulator was that it was difficult to get the keyboard to popup. To workaround this, I used Edit > Hardware > Keyboard > Toggle Software Keyboard when I needed to type text in a field.
 
-To deploy the app to an iPhone, start by plugging your iOS device into your computer. Then run the following commands to install ios-deploy/ios-sim, build the app, and run it on your device. If you've 
+To deploy the app to an iPhone, start by plugging your iOS device into your computer. Then run the following commands to install ios-deploy/ios-sim, build the app, and run it on your device. If you've
 
 ```
 npm install -g ios-deploy ios-sim
@@ -863,7 +863,7 @@ open ionic-beer.xcodeproj
 
 Select your phone as the target in Xcode and click the play button to run your app. The first time you do this, Xcode may spin for a while with a “Processing symbol files” message at the top.
 
-Deploying to your phone will likely fail because it won't be able to connect to `http://localhost:8080`. To fix this, copy [this script](./deploy.sh) to your hard drive. It expects to be in a directory above your apps. It also expects your apps to be named `client` and `server`. 
+Deploying to your phone will likely fail because it won't be able to connect to `http://localhost:8080`. To fix this, copy [this script](./deploy.sh) to your hard drive. It expects to be in a directory above your apps. It also expects your apps to be named `client` and `server`.
 
 If you don't have a Cloud Foundry account, you'll need to [create one](https://account.run.pivotal.io/z/uaa/sign-up) and install its command line tools for this script to work.
 
@@ -919,4 +919,4 @@ To learn more about Ionic, Angular, or Stormpath, please see the following resou
 
 * [Get started with Ionic Framework](http://ionicframework.com/getting-started/)
 * [Getting Started with Angular](https://www.youtube.com/watch?v=Jq3szz2KOOs) A YouTube webinar by yours truly. ;)
-* [Stormpath Client API Guide](https://docs.stormpath.com/client-api/product-guide/latest/) 
+* [Stormpath Client API Guide](https://docs.stormpath.com/client-api/product-guide/latest/)
