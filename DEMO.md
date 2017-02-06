@@ -179,14 +179,14 @@ To deploy the app to an iPhone, start by plugging your iOS device into your comp
 npm install -g ios-deploy ios-sim
 ionic build ios
 cd platforms/ios/
-open ionic-auth.xcodeproj
+open ionic-beer.xcodeproj
 ```
 
 Select your phone as the target in Xcode and click the play button to run your app. 
 
 ### Android
 
-To deploy to the Android emulator, add support for it to the ionic-auth project using the `ionic` command.
+To deploy to the Android emulator, add support for it to the ionic-beer project using the `ionic` command.
 
 ```
 ionic platform add android
@@ -201,7 +201,7 @@ Error: No emulator images (avds) found.
 HINT: For a faster emulator, use an Intel System Image and install the HAXM device driver
 ```
 
-I ran the first suggestion and downloaded my desired system image. Then I ran the second command and created an AVD with the following settings:
+Run the first suggestion and download your desired system image. Then  run the second command and created an AVD with the following settings:
 
 ```
 AVD Name: TestPhone
@@ -211,4 +211,4 @@ CPU/ABI: Google APIs Intel Axom (x86_64)
 Skin: Skin with dynamic hardware controls
 ```
 
-After performing these steps, I was able to run `ionic emulate android` and see my app running in the AVD.
+After performing these steps, you should be able to run `ionic emulate android` and see your app running in the AVD.
