@@ -53,41 +53,7 @@ Install [Ionic pages for Stormpath](https://github.com/stormpath/stormpath-sdk-a
 yarn add angular-stormpath-ionic
 ```
 
-Modify `src/app/app.module.ts` to define a `stormpathConfig` function that configures the `endpointPrefix` to point to `http://localhost:8080`. Import `StormpathModule`, `StormpathIonicModule`, and override the provider of `StormpathConfiguration`. You’ll also need to append Stormpath's pre-built Ionic pages to `entryComponents`.
-
-→ **stormpath-config**
-
-```typescript
-import { StormpathConfiguration, StormpathModule } from 'angular-stormpath';
-import { StormpathIonicModule, LoginPage, ForgotPasswordPage, RegisterPage } from 'angular-stormpath-ionic';
-
-export function stormpathConfig(): StormpathConfiguration {
-  let spConfig: StormpathConfiguration = new StormpathConfiguration();
-  spConfig.endpointPrefix = 'http://localhost:8080';
-  return spConfig;
-}
-
-@NgModule({
-  ...
-  imports: [
-    IonicModule.forRoot(MyApp),
-    StormpathModule,
-    StormpathIonicModule
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    ...
-    LoginPage,
-    ForgotPasswordPage,
-    RegisterPage
-  ],
-  providers: [
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    {provide: StormpathConfiguration, useFactory: stormpathConfig}
-  ]
-})
-export class AppModule {}
-```
+Modify `src/app/app.module.ts` to define a `stormpathConfig` function that configures the `endpointPrefix` to point to `http://localhost:8080`. Import `StormpathModule`, `StormpathIonicModule`, and override the provider of `StormpathConfiguration`. You’ll also need to append Stormpath's pre-built Ionic pages to `entryComponents`. → **stormpath-config**
 
 To render a login page before users can view the application, modify `src/app/app.component.ts` to use the `Stormpath` service and navigate to Stormpath's `LoginPage` if the user is not authenticated. → **io-app**
 
