@@ -9,7 +9,7 @@ This tutorial shows how to build a secure Spring Boot API with Stormpath. It als
 Create your Spring Boot API project using [start.spring.io](https://start.spring.io).
 
 ```
-http https://start.spring.io/starter.zip \/
+http https://start.spring.io/starter.zip \
 dependencies==data-jpa,data-rest,h2,web,devtools,security,stormpath -d
 ```
 
