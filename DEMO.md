@@ -182,13 +182,9 @@ cd platforms/ios/
 open ionic-auth.xcodeproj
 ```
 
-Select your phone as the target in Xcode and click the play button to run your app. The first time you do this, Xcode may spin for a while with a “Processing symbol files” message at the top.
-
-Once you’re configured your phone, computer, and Apple ID to work, you should be able to open the app and see login, register, and forgot password screens.
+Select your phone as the target in Xcode and click the play button to run your app. 
 
 ### Android
-
-To emulate or deploy to an Android device, you’ll first need to install [Android Studio](https://developer.android.com/studio/index.html). As part of the install, it will show you where it installed the Android SDK. Set this path as an ANDROID_HOME environment variable. On a Mac, it should be `~/Library/Android/sdk/`.
 
 To deploy to the Android emulator, add support for it to the ionic-auth project using the `ionic` command.
 
