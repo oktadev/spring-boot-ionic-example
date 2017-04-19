@@ -36,16 +36,10 @@ cf d -f ionic-server
 
 cf a
 
-# Stormpath
-stormpathApiKeyId=`cat ~/.stormpath/apiKey.properties | grep apiKey.id | cut -f3 -d\ `
-stormpathApiKeySecret=`cat ~/.stormpath/apiKey.properties | grep apiKey.secret | cut -f3 -d\ `
-
 # Deploy the server
 cd $r/server
 mvn clean package
 cf push -p target/*jar ionic-server --no-start  --random-route
-cf set-env ionic-server STORMPATH_API_KEY_ID $stormpathApiKeyId
-cf set-env ionic-server STORMPATH_API_KEY_SECRET $stormpathApiKeySecret
 cf set-env ionic-server FORCE_HTTPS true
 cf start ionic-server
 
@@ -53,7 +47,7 @@ cf start ionic-server
 serverUri=https://`app_domain ionic-server`
 
 # Deploy the client
-cd $r/client
+cd $r/ionic-beer
 npm run clean
 # replace the server URL in the client
 sed -i -e "s|http://localhost:8080|$serverUri|g" src/app/app.module.ts
@@ -63,5 +57,5 @@ npm install && ionic build ios
 ionic run ios
 
 # cleanup changed files
-git checkout $r/client
-rm $r/client/src/app/app.module.ts-e
+git checkout $r/ionic-beer
+rm $r/ionic-beer/src/app/app.module.ts-e

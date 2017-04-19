@@ -1,93 +1,31 @@
-# Spring Boot, Ionic, and Stormpath
+# Tutorial: Develop a Mobile App with Ionic and Spring Boot
 
-This tutorial shows how to build a secure Spring Boot API with Stormpath. It also shows how to build an Ionic app that securely connects to this API and can be deployed to a mobile device.
+Ionic 3.0 was [recently released](http://blog.ionic.io/ionic-3-0-has-arrived/), with support for 
+Angular 4, TypeScript 2.2, and lazy loading. Ionic, often called Ionic framework, is an open source
+(MIT-licensed) project that simplifies building native and progressive web apps. When developing an Ionic app, you'll use Angular and have access to native APIs via [Ionic Native](https://ionicframework.com/docs/native/) and [Apache Cordova](https://cordova.apache.org/). This means you can develop slick-looking UIs using the technologies you know and love: HTML, CSS, and JavaScript/TypeScript.
 
-**Prerequisites**: Java 8, Node.js, Maven, a [Stormpath Account](https://api.stormpath.com/register), and an `apiKey.properties` file in `~/stormpath/`.
+This tutorial shows how to build a Spring Boot API, how to build an Ionic app, and how to deploy it to a mobile device.
+
+**Prerequisites**: [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and [Node.js](https://nodejs.org) installed.
+
+## Create a Project
+
+To begin, create a directory on your hard drive called `spring-boot-ionic-example`. During this tutorial, you will create `server` and `ionic-beer` directories to hold the server and client applications, respectively.  
 
 ## Spring Boot API
 
-Create your Spring Boot API project using [start.spring.io](https://start.spring.io).
+I recently wrote about how to build a Spring Boot API in a [QuickStart Guide to Spring Boot with Angular]. Rather than covering that again, you can clone the existing project and copy the `server` directory into `spring-boot-ionic-example`.
 
+```bash
+git clone https://github.com/oktadeveloper/spring-boot-angular-example.git
+cp -r spring-boot-angular-example/server ~/spring-boot-ionic-example/.
 ```
-http https://start.spring.io/starter.zip \
-dependencies==data-jpa,data-rest,h2,web,devtools,security,stormpath -d
-```
 
-Run the application with `./mvnw spring-boot:run`.
+This project contains a `beers` API that allows you to <abbr title="Create, Read, Update, and Delete">CRUD</abbr> a list of beer names. It also contains a `/good-beers` endpoint that filters out less-than-great beers.
 
-Create a `Beer` entity class in `src/main/java/com/example/beer`.
+The default list of beers is created by a `BeerCommandLineRunner` class:
 
 ```java
-package com.example.beer;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-@Entity
-public class Beer {
-
-    @Id
-    @GeneratedValue
-    private Long id;
-    private String name;
-
-    public Beer() {
-    }
-
-    public Beer(String name) {
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Beer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-}
-```
-
-Create a JPA Repository to manage the `Beer` entity.
-
-```java
-package com.example.beer;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-
-@RepositoryRestResource
-interface BeerRepository extends JpaRepository<Beer, Long> {
-}
-```
-
-Create a CommandLineRunner to populate the database.
-
-```java
-package com.example.beer;
-
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
-
-import java.util.stream.Stream;
-
 @Component
 class BeerCommandLineRunner implements CommandLineRunner {
     private final BeerRepository repository;
@@ -98,29 +36,26 @@ class BeerCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        // top 5 beers from https://www.beeradvocate.com/lists/top/
-        Stream.of("Good Morning", "Kentucky Brunch Brand Stout", "ManBearPig", "King Julius",
-                "Very Hazy", "Budweiser", "Coors Light", "PBR").forEach(name ->
+        // Top beers from https://www.beeradvocate.com/lists/top/
+        Stream.of("Kentucky Brunch Brand Stout", "Good Morning", "Very Hazy", "King Julius",
+                "Budweiser", "Coors Light", "PBR").forEach(name ->
                 repository.save(new Beer(name))
         );
-        System.out.println(repository.findAll());
+        repository.findAll().forEach(System.out::println);
     }
 }
 ```
 
-Create a `BeerController` for your REST API. Add some business logic that results in a `/good-beers` endpoint.
+The `BeerRepository` interface is decorated with `@RepositoryRestResource` to expose CRUD endpoints for the `Beer` entity.
 
 ```java
-package com.example.beer;
+@RepositoryRestResource
+interface BeerRepository extends JpaRepository<Beer, Long> {}
+```
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+The last piece of the API is the `BeerController` that exposes `/good-beers` and specifies cross-origin resource sharing (CORS) settings.
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+```java
 @RestController
 public class BeerController {
     private BeerRepository repository;
@@ -130,6 +65,7 @@ public class BeerController {
     }
 
     @GetMapping("/good-beers")
+    @CrossOrigin(origins = "http://localhost:4200")
     public Collection<Map<String, String>> goodBeers() {
 
         return repository.findAll().stream()
@@ -148,248 +84,125 @@ public class BeerController {
                 !beer.getName().equals("PBR");
     }
 }
-
 ```
 
-Access the API using `http localhost:8080/good-beers --auth <user>:<password>`.
+You should be able to start the `server` application by running it in your favorite IDE or from the command line using `mvn spring-boot:run`. If you don't have Maven installed, you can use the Maven wrapper that's included in the project (`./mvnw spring-boot:run` on *nix, `\mvnw spring-boot:run` on Windows).
+
+After the app has started, navigate to <http://localhost:8080/good-beers>. You should see the list of good beers in your browser.
+
+![Good Beers JSON](static/good-beers-json.png) 
 
 ## Create Ionic App
 
-Install Ionic and Cordova: `yarn global add cordova ionic`
+To create an Ionic app to display data from your API, you'll first need to install Ionic CLI and Cordova: 
 
-From a terminal window, create a new application using the following command:
-
+```bash
+npm install -g ionic cordova
 ```
+
+The [Ionic CLI](http://ionicframework.com/docs/cli/) is a command-line tool that greatly reduces the time it takes to develop an Ionic app. It’s like a Swiss Army Knife: It brings together a bunch of miscellaneous tools under a single interface. The CLI contains a number of useful commands for Ionic development, such as `start`, `build`, `generate`, `serve`, and `run`.
+
+After installation completes, create a new application using the following command:
+
+```bash
 ionic start ionic-beer --v2
 ```
 
 This may take a minute or two to complete, depending on your internet connection speed. In the same terminal window, change to be in your application’s directory and run it.
 
-```
+```bash
 cd ionic-beer
 ionic serve
 ```
 
 This will open your default browser on [http://localhost:8100](http://localhost:8100). You can click through the tabbed interface to see the default structure of the app.
 
-## Upgrade to Angular 2.3
+![Ionic shell with tabs](static/ionic-tabs.png)
 
-With Angular versions less than 2.3, you can’t extend components and override their templates. The Ionic pages for Stormpath module uses component extension to override the templates in its pages. Because of this, you have to upgrade your project to use Angular 2.3. The only downside to use Angular 2.3 with Ionic 2.0.0 is that you won’t be able to use the `--prod` build flag when compiling. This is because its compiler does not support Angular 2.3.
+## Create a Good Beers UI
 
-To begin, modify `package.json` so all the `angular` dependencies use version `2.3.1` rather than `2.2.1`.
-
-```json
-"dependencies": {
-  "@angular/common": "2.3.1",
-  "@angular/compiler": "2.3.1",
-  "@angular/compiler-cli": "2.3.1",
-  "@angular/core": "2.3.1",
-  "@angular/forms": "2.3.1",
-  "@angular/http": "2.3.1",
-  "@angular/platform-browser": "2.3.1",
-  "@angular/platform-browser-dynamic": "2.3.1",
-  "@angular/platform-server": "2.3.1",
-```
-
-Run `yarn` to update to these versions.
-
-## Install Ionic Pages for Stormpath
-
-Install [Ionic pages for Stormpath](https://github.com/stormpath/stormpath-sdk-angular-ionic):
+Run `ionic generate page beer` to create a component and a template to display the list of good beers. This creates a number of files in `src/app/pages/beer`:
 
 ```
-yarn add angular-stormpath-ionic
+beer.html
+beer.module.ts
+beer.scss
+beer.ts
 ```
 
-Modify `src/app/app.module.ts` to define a `stormpathConfig` function. This function is used to configure the `endpointPrefix` to point to your Spring Boot API. Import `StormpathModule`, `StormpathIonicModule`, and override the provider of `StormpathConfiguration`. You’ll also need to append Stormpath's pre-built Ionic pages to `entryComponents`.
+Open `beer.ts` and change the name of the class to be `BeerPage`.
 
 ```typescript
-import { StormpathConfiguration, StormpathModule } from 'angular-stormpath';
-import { StormpathIonicModule, LoginPage, ForgotPasswordPage, RegisterPage } from 'angular-stormpath-ionic';
+export class BeerPage {
 
-export function stormpathConfig(): StormpathConfiguration {
-  let spConfig: StormpathConfiguration = new StormpathConfiguration();
-  spConfig.endpointPrefix = 'http://localhost:8080';
-  return spConfig;
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad BeerPage');
+  }
+
 }
+```
+
+Modify `beer.module.ts` to change the class name too.
+
+```typescript
+import { NgModule } from '@angular/core';
+import { IonicModule } from 'ionic-angular';
+import { BeerPage } from './beer';
+
+@NgModule({
+  declarations: [
+    BeerPage
+  ],
+  imports: [
+    IonicModule.forRoot(BeerPage),
+  ],
+  exports: [
+    BeerPage
+  ]
+})
+export class BeerModule {}
+```
+
+Add `BeerModule` to the `imports` list in `app.module.ts`.
+
+```typescript
+import { BeerModule } from '../pages/beer/beer.module';
 
 @NgModule({
   ...
   imports: [
+    BrowserModule,
     IonicModule.forRoot(MyApp),
-    StormpathModule,
-    StormpathIonicModule
+    BeerModule
   ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    ...
-    LoginPage,
-    ForgotPasswordPage,
-    RegisterPage
-  ],
-  providers: [
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    {provide: StormpathConfiguration, useFactory: stormpathConfig}
-  ]
-})
-export class AppModule {}
-```
-
-To render a login page before users can view the application, modify `src/app/app.component.ts` to use the `Stormpath` service and navigate to Stormpath's `LoginPage` if the user is not authenticated.
-
-```typescript
-import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
-import { StatusBar, Splashscreen } from 'ionic-native';
-import { TabsPage } from '../pages/tabs/tabs';
-import { Stormpath } from 'angular-stormpath';
-import { LoginPage } from 'angular-stormpath-ionic';
-
-@Component({
-  templateUrl: 'app.html'
-})
-export class MyApp {
-  rootPage;
-
-  constructor(platform: Platform, private stormpath: Stormpath) {
-    stormpath.user$.subscribe(user => {
-      if (!user) {
-        this.rootPage = LoginPage;
-      } else {
-        this.rootPage = TabsPage;
-      }
-    });
-
-    platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      StatusBar.styleDefault();
-      Splashscreen.hide();
-    });
-  }
-}
-```
-
-If you run `ionic serve`, you’ll likely see something similar to the following error in your browser’s console.
-
-```
-XMLHttpRequest cannot load http://localhost:8080/me. Response to preflight request
-doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on
-the requested resource. Origin 'http://localhost:8100 is therefore not allowed access.
-The response had HTTP status code 403.
-```
-
-To fix this, open your Spring Boot application's `src/main/resources/application.properties` and add the following line. This enables cross-origin resource sharing (CORS) from both the browser and the mobile client.
-
-```
-stormpath.web.cors.allowed.originUris = http://localhost:8100,file://
-```
-
-Restart Spring Boot and your Ionic app. You should see a login screen when you run `ionic serve`.
-
-![Stormpath Login for Ionic](./static/ionic-login.png)
-
-In `src/pages/home.html`, add a logout link to the header and a paragraph in the content section that shows the currently logged in user.
-
-```html
-<ion-header>
-  <ion-navbar>
-    <ion-title>Home</ion-title>
-    <ion-buttons end>
-      <button ion-button icon-only (click)="logout()">
-        Logout
-      </button>
-    </ion-buttons>
-  </ion-navbar>
-</ion-header>
-
-<ion-content padding>
   ...
-  <p *ngIf="(user$ | async)">
-    You are logged in as: <b>{{ ( user$ | async ).fullName }}</b>
-  </p>
-</ion-content>
+})
 ```
 
-If you login, the “Logout” button will render, but won’t work because there’s no `logout()` method in `src/pages/home.ts`. Similarly, the “You are logged in” message won’t appear because there’s no `user$` variable defined. Change the body of `home.ts` to retrieve `user$` from the `Stormpath` service and define the `logout()` method.
+Run `ionic g provider beer-service` to create a service to fetch the beer list from the Spring Boot API.
 
-```typescript
-import { Account, Stormpath } from 'angular-stormpath';
-import { Observable } from 'rxjs';
-...
-export class HomePage {
-  user$: Observable<Account | boolean>;
-
-  constructor(private stormpath: Stormpath) {
-    this.user$ = this.stormpath.user$;
-  }
-
-  logout(): void {
-    this.stormpath.logout();
-  }
-}
-```
-
-If you’re logged in, you should see a screen with a logout button and the name of the currently logged in user.
-
-![Logged in as: Hip User](./static/ionic-home.png)
-
-The `LoginPage` tries to auto-focus onto the `email` field when it loads. To auto-activate the keyboard you'll need to tell Cordova it’s OK to display the keyboard without user interaction. You can do this by adding the following to `config.xml` in the root directory.
-
-```xml
-<preference name="KeyboardDisplayRequiresUserAction" value="false"/>
-```
-
-Check your changes into Git.
-
-```
-git add .
-git commit -m "Add Stormpath"
-```
-
-## Build a Good Beers UI
-
-Run `ionic generate page beer` to create a component and a template to display the list of good beers.
-
-Add `BeerPage` to the `declarations` and `entryComponent` lists in `app.module.ts`.
-
-Run `ionic generate provider beer-service` to create a service to fetch the beer list from the Spring Boot API.
-
-Change `src/providers/beer-service.ts` to use have a `getGoodBeers()` method.
+Change `src/providers/beer-service.ts` to have constants for the API path and add a `getGoodBeers()` method.
 
 ```typescript
 import { Injectable } from '@angular/core';
-import { Http, Response, RequestOptions } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs';
-import { StormpathConfiguration } from 'angular-stormpath';
 
 @Injectable()
 export class BeerService {
-  public API;
-  public BEER_API;
+  public API = 'http://localhost:8080';
+  public BEER_API = this.API + '/beers';
 
-  constructor(public http: Http, public config: StormpathConfiguration) {
-    this.API = config.endpointPrefix;
-    this.BEER_API = this.API + '/beers';
-  }
+  constructor(private http: Http) {}
 
   getGoodBeers(): Observable<any> {
-    let options = new RequestOptions({ withCredentials: true });
-    return this.http.get(this.API + '/good-beers', options)
+    return this.http.get(this.API + '/good-beers')
       .map((response: Response) => response.json());
   }
-}
-```
-
-**TIP:** If you don’t want to pass in `withCredentials: true`, you can add the API URI as an `autoAuthorizeUri` in `StormpathConfiguration`.
-
-```typescript
-export function stormpathConfig(): StormpathConfiguration {
-  let spConfig: StormpathConfiguration = new StormpathConfiguration();
-  spConfig.endpointPrefix = 'http://localhost:8080';
-  spConfig.autoAuthorizedUris.push(new RegExp(spConfig.endpointPrefix + '/*'));
-  return spConfig;
 }
 ```
 
@@ -405,28 +218,43 @@ Modify `beer.html` to show the list of beers.
 
 <ion-content padding>
   <ion-list>
-    <ion-item *ngFor="let beer of beers" >
+    <ion-item *ngFor="let beer of beers">
       <h2>{{beer.name}}</h2>
     </ion-item>
   </ion-list>
 </ion-content>
 ```
 
-Update `beer.ts` to import `BeerService` and add as a provider. Call the `getGoodBeers()` method in the `ionViewDidLoad()` lifecycle method.
+Modify `beer.module.ts` to import `BeerService` and add it as a provider. You could add it as a provider in each component, but adding it in the module allows all components to use it. 
+
+```typescript
+import { BeerService } from '../../providers/beer-service';
+
+@NgModule({
+  ...
+  providers: [
+    BeerService
+  ]
+})
+```
+
+Update `beer.ts` to import `BeerService` and add it as a dependency in the constructor. Call the `getGoodBeers()` method in the `ionViewDidLoad()` lifecycle method.
 
 ```typescript
 import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BeerService } from '../../providers/beer-service';
 
+@IonicPage()
 @Component({
   selector: 'page-beer',
-  templateUrl: 'beer.html',
-  providers: [BeerService]
+  templateUrl: 'beer.html'
 })
 export class BeerPage {
   private beers: Array<any>;
 
-  constructor(public beerService: BeerService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              public beerService: BeerService) {
   }
 
   ionViewDidLoad() {
@@ -451,19 +279,16 @@ import { BeerPage } from '../beer/beer';
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
-  // this tells the tabs component which Pages
-  // should be each tab's root Page
   tab1Root: any = HomePage;
   tab2Root: any = BeerPage;
   tab3Root: any = ContactPage;
   tab4Root: any = AboutPage;
 
-  constructor() {
-  }
+  constructor() {}
 }
 ```
 
-Update `tabs.html` too!
+You'll also need to update `tabs.html` to have the new tab order.
 
 ```html
 <ion-tabs>
@@ -474,7 +299,9 @@ Update `tabs.html` too!
 </ion-tabs>
 ```
 
-Add some fun with Giphy! Run `ionic generate provider giphy-service`. Replace the code in `src/providers/giphy-service.ts` with the following TypeScript:
+### Add Some Fun with Animated GIFs
+
+Run `ionic g provider giphy-service` to generate a `GiphyService` class. Replace the code in `src/providers/giphy-service.ts` with code that searches Giphy's API:
 
 ```typescript
 import { Injectable } from '@angular/core';
@@ -485,6 +312,7 @@ import { Observable } from 'rxjs';
 // http://tutorials.pluralsight.com/front-end-javascript/getting-started-with-angular-2-by-building-a-giphy-search-application
 export class GiphyService {
 
+  // Public beta key: https://github.com/Giphy/GiphyAPI#public-beta-key
   giphyApi = 'https://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&q=';
 
   constructor(public http: Http) {
@@ -504,22 +332,38 @@ export class GiphyService {
 }
 ```
 
-Update `beer.ts` to take advantage of `GiphyService`:
+Update `beer.module.ts` to import `GiphyService` and include it is as a provider.
+
+```typescript
+import { GiphyService } from '../../providers/giphy-service';
+
+@NgModule({
+  ...
+  providers: [
+    BeerService,
+    GiphyService
+  ]
+})
+```
+
+Modify `beer.ts` to import `GiphyService` and set a `giphyUrl` on each beer.
 
 ```typescript
 import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BeerService } from '../../providers/beer-service';
 import { GiphyService } from '../../providers/giphy-service';
 
+@IonicPage()
 @Component({
   selector: 'page-beer',
-  templateUrl: 'beer.html',
-  providers: [BeerService, GiphyService]
+  templateUrl: 'beer.html'
 })
 export class BeerPage {
   private beers: Array<any>;
 
-  constructor(public beerService: BeerService, public giphyService: GiphyService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              public beerService: BeerService, public giphyService: GiphyService) {
   }
 
   ionViewDidLoad() {
@@ -546,11 +390,49 @@ Update `beer.html` to display the image retrieved:
 </ion-item>
 ```
 
+Start the Spring Boot app in one terminal and run `ionic serve` in another. Open <http://localhost:8100> in your browser. Click on the Beer icon and you'll likely see an error in your browser.
+
+```
+Uncaught (in promise): Error: No provider for Http! 
+```
+
+![No provider for Http!](static/no-http-provider.png)
+
+This highlights one of the slick features of Ionic: errors are displayed in your browser, not just the browser's console. Add `HttpModule` to the list of imports in `src/app/app.module.ts` to solve this issue.
+
+```typescript
+import { HttpModule } from '@angular/http';
+
+@NgModule({
+  ...
+  imports: [
+    BrowserModule,
+    HttpModule,
+    IonicModule.forRoot(MyApp),
+    BeerModule
+  ],
+```
+
+After making this change, you’ll likely see the following error in your browser’s console.
+
+```
+XMLHttpRequest cannot load http://localhost:8080/good-beers. No 'Access-Control-Allow-Origin' 
+header is present on the requested resource. Origin 'http://localhost:8100' is therefore 
+not allowed access. The response had HTTP status code 401.
+```
+
+To fix this, open your Spring Boot application's `BeerController.java` class and change its `@CrossOrigin` annotation to allow `http://localhost:8100` and `file://`. This enables cross-origin resource sharing (CORS) from both the browser and the mobile client.
+
+```java
+@CrossOrigin(origins = {"http://localhost:8100","file://"})
+public Collection<Map<String, String>> goodBeers() {
+```
+
+Recompile this class and DevTools should restart the application.
+
 If everything works as expected, you should see a page similar to the one below in your browser.
 
-<p align="center">
-<img src="./static/good-beers-ui.png" width="600" alt="Good Beers UI">
-</p>
+![Good Beers UI](static/good-beers-ui.png)
 
 ### Add a Modal for Editing
 
@@ -578,12 +460,13 @@ In this same file, change `<ion-item>` to have a click handler for opening the m
 Add `ModalController` as a dependency in `BeerPage` and add an `openModal()` method.
 
 ```typescript
-import { ModalController } from 'ionic-angular';
+import { IonicPage, ModalController, NavController, NavParams } from 'ionic-angular';
 
 export class BeerPage {
   private beers: Array<any>;
 
-  constructor(public beerService: BeerService, public giphyService: GiphyService,
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              public beerService: BeerService, public giphyService: GiphyService,
               public modalCtrl: ModalController) {
   }
 
@@ -654,7 +537,7 @@ export class BeerModalPage {
 }
 ```
 
-Create `beer-modal.html` as a template for this page.
+Add the import for `BeerModalPage` to `beer.ts`, then create `beer-modal.html` as a template for this page.
 
 ```html
 <ion-header>
@@ -699,7 +582,7 @@ Create `beer-modal.html` as a template for this page.
 </ion-content>
 ```
 
-Add `BeerModalPage` to the `declarations` and `entryComponent` lists in `app.module.ts`.
+Add `BeerModalPage` to the `declarations` and `entryComponent` lists in `beer.module.ts`.
 
 You'll also need to modify `beer-service.ts` to have `get()` and `save()` methods.
 
@@ -720,6 +603,40 @@ save(beer: any): Observable<any> {
     .catch(error => Observable.throw(error));
 }
 ```
+
+At this point, if you try to add or edit a beer name, you'll likely see an error in your browser's console.
+
+```
+ModalCmp ionViewPreLoad error: No component factory found for BeerModalPage. 
+Did you add it to @NgModule.entryComponents?
+```
+
+Add `BeerModalPage` to the list of `entryComponents` in `app.module.ts`. While you're in there, add `BeerService` to the list of global providers so you don't have to add it to each component that uses it.
+
+```typescript
+@NgModule({
+  ...
+  entryComponents: [
+    ...
+    BeerModalPage
+  ],
+  providers: [
+    BeerService,
+    ...
+  ]
+})
+```
+
+Now if you try to edit a beer's name, you'll see another CORS in your browser's console. Add a `@CrossOrigin` annotation to `BeerRepository.java` (in your Spring Boot project) that matches the one in `BeerController`.
+ 
+```java
+@RepositoryRestResource
+@CrossOrigin(origins = {"http://localhost:8100","file://"})
+```
+
+Re-compile and now everything should work as expected. For example, below is a screenshot that shows I added a new beer and what it looks like when editing it.
+ 
+![Mmmmm, Guinness](static/beer-modal.png)
 
 ### Add Swipe to Delete
 
@@ -766,7 +683,8 @@ remove(beer) {
 Add `toastCtrl` as a dependency in the constructor so everything compiles.
 
 ```typescript
-constructor(public beerService: BeerService, public giphyService: GiphyService,
+constructor(public navCtrl: NavController, public navParams: NavParams,
+          public beerService: BeerService, public giphyService: GiphyService,
           public modalCtrl: ModalController, public toastCtrl: ToastController) {
 }
 ```
@@ -780,37 +698,36 @@ remove(id: string) {
 }
 ```
 
-After making these additions, you should be able to add, edit and delete beers.
+After making these additions, you should be able to delete beer names. To emulate a left swipe in your browser, click on the item and drag it to the left.
 
-<p align="center">
-<img src="./static/beer-modal.png" width="350">&nbsp;&nbsp;
-<img src="./static/beer-delete.png" width="350">
-</p>
+![Left swipe](static/beer-delete.png)
 
 ## PWAs with Ionic
 
-Ionic 2 ships with support for creating progressive web apps (PWAs). If you’d like to learn more about what PWAs are, see [Navigating the World of Progressive Web Apps with Ionic 2](http://blog.ionic.io/navigating-the-world-of-progressive-web-apps-with-ionic-2/).
+Ionic ships with support for creating progressive web apps (PWAs). If you’d like to learn more about what PWAs are, see [Navigating the World of Progressive Web Apps with Ionic 2](http://blog.ionic.io/navigating-the-world-of-progressive-web-apps-with-ionic-2/). This blog post is still relevant for Ionic 3.
 
-If you run the [Lighthouse Chrome extension](https://developers.google.com/web/tools/lighthouse/) on this application, you’ll get a mediocre score (54/100).
+If you run the [Lighthouse Chrome extension](https://developers.google.com/web/tools/lighthouse/) on this application, you’ll get a mediocre score (51/100).
 
-To register a service worker, and improve the app’s score, uncomment the following block in `index.html`.
+![Lighthouse: 51](static/lighthouse-51.png)
+
+To register a service worker, and improve the app’s score, uncomment the following block in `src/index.html`.
 
 ```html
 <!-- un-comment this code to enable service worker
 <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('service worker installed'))
-      .catch(err => console.log('Error', err));
-  }
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(() => console.log('service worker installed'))
+    .catch(err => console.log('Error', err));
+}
 </script>-->
 ```
 
-After making this change, the score should improve. In my tests, it increased to 69/100. The remaining issues were:
+After making this change, the score should improve. In my tests, it increased to 66/100. The remaining issues were:
 
-* The page body should render some content if its scripts are not available. This could likely be solved with [Angular’s app-shell directives](https://www.npmjs.com/package/@angular/app-shell).
-* Site is not on HTTPS and does not redirect HTTP to HTTPS.
 * A couple -1’s in performance for "Cannot read property 'ts' of undefined”.
+* Site is not progressively enhanced (page should contain some content when JavaScript is not available). This could likely be solved with [Angular’s app-shell directives](https://www.npmjs.com/package/@angular/app-shell).
+* Site is not on HTTPS and does not redirect HTTP to HTTPS.
 
 If you refresh the app and Chrome doesn’t prompt you to install the app (a PWA feature), you probably need to turn on a couple of features. Copy and paste the following URLs into Chrome and enable each feature.
 
@@ -819,13 +736,15 @@ chrome://flags/#bypass-app-banner-engagement-checks
 chrome://flags/#enable-add-to-shelf
 ```
 
-After enabling these flags, you’ll see an error in your browser’s console about `assets/imgs/logo.png` not being found. This files is referenced in `src/manifest.json`. You can fix this by copying a 512x512 PNG into this location or by modifying `manifest.json` accordingly.
+After enabling these flags, you’ll see an error in your browser’s console about `assets/imgs/logo.png` not being found. This file is referenced in `src/manifest.json`. You can fix this by copying a 512x512 PNG ([like this one](http://www.iconsdb.com/orange-icons/beer-icon.html)) into this location or by modifying `manifest.json` accordingly. At the very least, you should modify `manifest.json` to have your app's name.
 
 ## Deploy to a Mobile Device
 
 It’s pretty cool that you’re able to develop mobile apps with Ionic in your browser. However, it’s nice to see the fruits of your labor and see how awesome your app looks on a phone. It really does look and behave like a native app!
 
 To see how your application will look on different devices you can run `ionic serve --lab`. The `--lab` flag opens opens a page in your browser that lets you see how your app looks on different devices.
+
+![Ionic Labs](static/ionic-labs.png)
 
 ### iOS
 
@@ -854,7 +773,7 @@ open ionic-beer.xcodeproj
 
 Select your phone as the target in Xcode and click the play button to run your app. The first time you do this, Xcode may spin for a while with a “Processing symbol files” message at the top.
 
-Deploying to your phone will likely fail because it won't be able to connect to `http://localhost:8080`. To fix this, copy [this script](./deploy.sh) to your hard drive. It expects to be in a directory above your apps. It also expects your apps to be named `client` and `server`.
+Deploying to your phone will likely fail because it won't be able to connect to `http://localhost:8080`. To fix this, copy [this script](./deploy.sh) to your hard drive. It expects to be in a directory above your apps. It also expects your apps to be named `ionic-beer` and `server`.
 
 If you don't have a Cloud Foundry account, you'll need to [create one](https://account.run.pivotal.io/z/uaa/sign-up) and install its command line tools for this script to work.
 
@@ -862,13 +781,9 @@ If you don't have a Cloud Foundry account, you'll need to [create one](https://a
 brew tap cloudfoundry/tap && brew install cf-cli
 ```
 
-Once you’re configured your phone, computer, and Apple ID to work, you should be able to open the app and see all the screens you created. Below are the ones the ones I captured on my iPhone 6s Plus.
+Once you’re configured your phone, computer, and Apple ID to work, you should be able to open the app and see the beer list you created. Below is how it looks on my iPhone 6s Plus.
 
-<p align="center">
-<img src="./static/iphone-login.png" width="250">&nbsp;&nbsp;
-<img src="./static/iphone-register.png" width="250">&nbsp;&nbsp;
-<img src="./static/iphone-forgot-password.png" width="250">
-</p>
+![iPhone Beer List](static/iphone-beer-list.png)
 
 ### Android
 
@@ -903,11 +818,18 @@ Skin: Skin with dynamic hardware controls
 
 After performing these steps, you should be able to run `ionic emulate android` and see your app running in the AVD.
 
-## Learn More
-I hope you’ve enjoyed this tour of Ionic, Angular, and Stormpath. I like how Ionic takes your web development skills up a notch and allows you to create mobile applications that look and behave natively.
+![Android Beer List](static/android-beer-list.png)
 
-To learn more about Ionic, Angular, or Stormpath, please see the following resources:
+## Learn More
+
+I hope you’ve enjoyed this tour of Ionic and Angular. I like how Ionic takes your web development skills up a notch and allows you to create mobile applications that look and behave natively.
+
+You can find a completed version of the application created in this blog post [on GitHub](https://github.com/oktadeveloper/spring-boot-ionic-example).
+
+If you encountered issues, please [create an issue in GitHub](TODO) or hit me up on Twitter [@mraible](https://twitter.com/mraible).
+
+To learn more about Ionic or Angular, please see the following resources:
 
 * [Get started with Ionic Framework](http://ionicframework.com/getting-started/)
+* [Angular Authentication with OpenID Connect and Okta in 20 Minutes](http://developer.okta.com/blog/2017/04/17/angular-authentication-with-oidc)
 * [Getting Started with Angular](https://www.youtube.com/watch?v=Jq3szz2KOOs) A YouTube webinar by yours truly. ;)
-* [Stormpath Client API Guide](https://docs.stormpath.com/client-api/product-guide/latest/)
