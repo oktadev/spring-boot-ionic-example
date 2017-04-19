@@ -39,7 +39,7 @@ cf a
 # Deploy the server
 cd $r/server
 mvn clean package
-cf push -p target/*jar ionic-server --no-start  --random-route
+cf push -p target/*jar ionic-server --no-start --random-route
 cf set-env ionic-server FORCE_HTTPS true
 cf start ionic-server
 
@@ -53,8 +53,14 @@ npm run clean
 sed -i -e "s|http://localhost:8080|$serverUri|g" src/providers/beer-service.ts
 npm install
 
-# deploy client to phone
+# build ios
+ionic build ios --prod
+# Run on ios
 ionic run ios --device
+
+# If the above command fails with the following error:
+# xcrun: error: unable to find utility "PackageApplication", not a developer tool or in PATH
+# See http://stackoverflow.com/a/43363820
 
 # cleanup changed files
 git checkout $r/ionic-beer

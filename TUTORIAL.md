@@ -100,7 +100,7 @@ To create an Ionic app to display data from your API, you'll first need to insta
 npm install -g ionic cordova
 ```
 
-The [Ionic CLI](http://ionicframework.com/docs/cli/) is a command-line tool that greatly reduces the time it takes to develop an Ionic app. It’s like a Swiss Army Knife: It brings together a bunch of miscellaneous tools under a single interface. The CLI contains a number of useful commands for Ionic development, such as `start`, `build`, `generate`, `serve`, and `run`.
+The [Ionic CLI](http://ionicframework.com/docs/cli/) is a command-line tool that greatly reduces the time it takes to develop an Ionic app. It's like a Swiss Army Knife: It brings together a bunch of miscellaneous tools under a single interface. The CLI contains a number of useful commands for Ionic development, such as `start`, `build`, `generate`, `serve`, and `run`.
 
 After installation completes, create a new application using the following command:
 
@@ -108,7 +108,7 @@ After installation completes, create a new application using the following comma
 ionic start ionic-beer --v2
 ```
 
-This may take a minute or two to complete, depending on your internet connection speed. In the same terminal window, change to be in your application’s directory and run it.
+This may take a minute or two to complete, depending on your internet connection speed. In the same terminal window, change to be in your application's directory and run it.
 
 ```bash
 cd ionic-beer
@@ -413,7 +413,7 @@ import { HttpModule } from '@angular/http';
   ],
 ```
 
-After making this change, you’ll likely see the following error in your browser’s console.
+After making this change, you'll likely see the following error in your browser's console.
 
 ```
 XMLHttpRequest cannot load http://localhost:8080/good-beers. No 'Access-Control-Allow-Origin' 
@@ -704,13 +704,13 @@ After making these additions, you should be able to delete beer names. To emulat
 
 ## PWAs with Ionic
 
-Ionic ships with support for creating progressive web apps (PWAs). If you’d like to learn more about what PWAs are, see [Navigating the World of Progressive Web Apps with Ionic 2](http://blog.ionic.io/navigating-the-world-of-progressive-web-apps-with-ionic-2/). This blog post is still relevant for Ionic 3.
+Ionic ships with support for creating progressive web apps (PWAs). If you'd like to learn more about what PWAs are, see [Navigating the World of Progressive Web Apps with Ionic 2](http://blog.ionic.io/navigating-the-world-of-progressive-web-apps-with-ionic-2/). This blog post is still relevant for Ionic 3.
 
-If you run the [Lighthouse Chrome extension](https://developers.google.com/web/tools/lighthouse/) on this application, you’ll get a mediocre score (51/100).
+If you run the [Lighthouse Chrome extension](https://developers.google.com/web/tools/lighthouse/) on this application, you'll get a mediocre score (51/100).
 
 ![Lighthouse: 51](static/lighthouse-51.png)
 
-To register a service worker, and improve the app’s score, uncomment the following block in `src/index.html`.
+To register a service worker, and improve the app's score, uncomment the following block in `src/index.html`.
 
 ```html
 <!-- un-comment this code to enable service worker
@@ -725,22 +725,22 @@ if ('serviceWorker' in navigator) {
 
 After making this change, the score should improve. In my tests, it increased to 66/100. The remaining issues were:
 
-* A couple -1’s in performance for "Cannot read property 'ts' of undefined".
-* Site is not progressively enhanced (page should contain some content when JavaScript is not available). This could likely be solved with [Angular’s app-shell directives](https://www.npmjs.com/package/@angular/app-shell).
+* A couple -1's in performance for "Cannot read property 'ts' of undefined".
+* Site is not progressively enhanced (page should contain some content when JavaScript is not available). This could likely be solved with [Angular's app-shell directives](https://www.npmjs.com/package/@angular/app-shell).
 * Site is not on HTTPS and does not redirect HTTP to HTTPS.
 
-If you refresh the app and Chrome doesn’t prompt you to install the app (a PWA feature), you probably need to turn on a couple of features. Copy and paste the following URLs into Chrome and enable each feature.
+If you refresh the app and Chrome doesn't prompt you to install the app (a PWA feature), you probably need to turn on a couple of features. Copy and paste the following URLs into Chrome and enable each feature.
 
 ```
 chrome://flags/#bypass-app-banner-engagement-checks
 chrome://flags/#enable-add-to-shelf
 ```
 
-After enabling these flags, you’ll see an error in your browser’s console about `assets/imgs/logo.png` not being found. This file is referenced in `src/manifest.json`. You can fix this by copying a 512x512 PNG ([like this one](http://www.iconsdb.com/orange-icons/beer-icon.html)) into this location or by modifying `manifest.json` accordingly. At the very least, you should modify `manifest.json` to have your app's name.
+After enabling these flags, you'll see an error in your browser's console about `assets/imgs/logo.png` not being found. This file is referenced in `src/manifest.json`. You can fix this by copying a 512x512 PNG ([like this one](http://www.iconsdb.com/orange-icons/beer-icon.html)) into this location or by modifying `manifest.json` accordingly. At the very least, you should modify `manifest.json` to have your app's name.
 
 ## Deploy to a Mobile Device
 
-It’s pretty cool that you’re able to develop mobile apps with Ionic in your browser. However, it’s nice to see the fruits of your labor and see how awesome your app looks on a phone. It really does look and behave like a native app!
+It's pretty cool that you're able to develop mobile apps with Ionic in your browser. However, it's nice to see the fruits of your labor and see how awesome your app looks on a phone. It really does look and behave like a native app!
 
 To see how your application will look on different devices you can run `ionic serve --lab`. The `--lab` flag opens opens a page in your browser that lets you see how your app looks on different devices.
 
@@ -748,7 +748,7 @@ To see how your application will look on different devices you can run `ionic se
 
 ### iOS
 
-To emulate or deploy to an iOS device, you’ll need a Mac and a fresh installation of [Xcode](https://developer.apple.com/xcode/). If you’d like to build iOS apps on Windows, Ionic offers an [Ionic Package](http://ionic.io/cloud#packaging) service.
+To emulate or deploy to an iOS device, you'll need a Mac and a fresh installation of [Xcode](https://developer.apple.com/xcode/). If you'd like to build iOS apps on Windows, Ionic offers an [Ionic Package](http://ionic.io/cloud#packaging) service.
 
 Make sure to open Xcode to complete the installation.
 
@@ -758,11 +758,11 @@ Ionic 3.0 generates iOS-enabled applications by default. If you're using a versi
 ionic platform add ios
 ```
 
-Then run `ionic emulate ios` to open your app in Simulator.
+Then run `ionic emulate ios` to open your app in Simulator. 
 
-The biggest problem I found when running the app in Simulator was that it was difficult to get the keyboard to popup. To workaround this, I used Edit > Hardware > Keyboard > Toggle Software Keyboard when I needed to type text in a field.
+**TIP:** The biggest problem I found when running the app in Simulator was that it was difficult to get the keyboard to popup. To workaround this, I used **Hardware** > **Keyboard** > **Toggle Software Keyboard** when I needed to type text in a field.
 
-Deploying to your phone will likely fail because it won't be able to connect to `http://localhost:8080`. To fix this, you can deploy your Spring Boot app to the internet, or use your computer's IP address (if you're on the same network). 
+Deploying to your phone will likely fail because it won't be able to connect to `http://localhost:8080`. To fix this, you can deploy your Spring Boot app to a public server, or use your computer's IP address in `beer.service.ts` (if you're on the same network). 
 
 <div style="padding: 5px; background: #eee; border: 1px solid silver; margin-bottom: 10px">
 <p>To deploy to Cloud Foundry, copy <a href="https://github.com/oktadeveloper/spring-boot-ionic-example/blob/master/deploy.sh">this deploy script</a> to your hard drive. It expects to be in a directory above your apps (e.g. <code>spring-boot-ionic-example</code>). It also expects your apps to be named <code>ionic-beer</code> and <code>server</code>.
@@ -779,7 +779,7 @@ To deploy the app to an iPhone, start by plugging it into your computer. Then ru
 
 ```
 npm install -g ios-deploy ios-sim
-ionic build ios
+ionic build ios --prod
 cd platforms/ios/
 open ionic-beer.xcodeproj
 ```
@@ -788,15 +788,15 @@ Select your phone as the target in Xcode and click the play button to run your a
 
 **NOTE:** If you run into code signing issues, see [Ionic's deployment documentation](http://ionicframework.com/docs/intro/deploying/#ios-devices) to see how to solve.
 
-Once you’re configured your phone, computer, and Apple ID to work, you should be able to open the app and see the beer list you created. Below is how it looks on my iPhone 6s Plus.
+Once you've configured your phone, computer, and Apple ID to work, you should be able to open the app and see the beer list you created. Below is how it looks on my iPhone 6s Plus.
 
-![iPhone Beer List](static/iphone-beer-list.png)
+<img src="static/iphone-beer-list.jpg" style="width: 621px" alt="iPhone Beer List">
 
 ### Android
 
-To emulate or deploy to an Android device, you’ll first need to install [Android Studio](https://developer.android.com/studio/index.html). As part of the install, it will show you where it installed the Android SDK. Set this path as an ANDROID_HOME environment variable. On a Mac, it should be `~/Library/Android/sdk/`.
+To emulate or deploy to an Android device, you'll first need to install [Android Studio](https://developer.android.com/studio/index.html). As part of the install, it will show you where it installed the Android SDK. Set this path as an ANDROID_HOME environment variable. On a Mac, it should be `~/Library/Android/sdk/`.
 
-Make sure to open Android Studio to complete the installation.
+If you've just installed Android Studio, make sure to open it to complete the installation.
 
 To deploy to the Android emulator, add support for it to the ionic-beer project using the `ionic` command.
 
@@ -804,7 +804,7 @@ To deploy to the Android emulator, add support for it to the ionic-beer project 
 ionic platform add android
 ```
 
-If you run `ionic emulate android` you’ll get instructions from about how to create an emulator image.
+If you run `ionic emulate android` you'll get instructions from about how to create an emulator image.
 
 ```
 Error: No emulator images (avds) found.
@@ -813,7 +813,7 @@ Error: No emulator images (avds) found.
 HINT: For a faster emulator, use an Intel System Image and install the HAXM device driver
 ```
 
-Run the first suggestion and download your desired system image. Then  run the second command and created an AVD with the following settings:
+Run the first suggestion and download your desired system image. Then  run the second command and created an AVD (Android Virtual Device) with the following settings:
 
 ```
 AVD Name: TestPhone
@@ -825,18 +825,25 @@ Skin: Skin with dynamic hardware controls
 
 After performing these steps, you should be able to run `ionic emulate android` and see your app running in the AVD.
 
-![Android Beer List](static/android-beer-list.png)
+<img src="static/android-beer-list.jpg" style="width: 540px" alt="Android Beer List">
+
+**NOTE**: If you get an application error that says "The connection to the server was unsuccessful. (file:///android/www/index.html)", add the following line to `config.xml`. This sets the default timeout to 60 seconds (default is 20). Thanks to [Stack Overflow](http://stackoverflow.com/a/31377846) for the answer.
+
+```xml
+<preference name="loadUrlTimeoutValue" value="60000"/>
+```
 
 ## Learn More
 
-I hope you’ve enjoyed this tour of Ionic and Angular. I like how Ionic takes your web development skills up a notch and allows you to create mobile applications that look and behave natively.
+I hope you've enjoyed this tour of Ionic and Angular. I like how Ionic takes your web development skills up a notch and allows you to create mobile applications that look and behave natively.
 
 You can find a completed version of the application created in this blog post [on GitHub](https://github.com/oktadeveloper/spring-boot-ionic-example).
 
-If you encountered issues, please [create an issue in GitHub](TODO) or hit me up on Twitter [@mraible](https://twitter.com/mraible).
+If you encountered issues, please [create an issue in GitHub](https://github.com/oktadeveloper/spring-boot-ionic-example/issues/new) or hit me up on Twitter [@mraible](https://twitter.com/mraible).
 
 To learn more about Ionic or Angular, please see the following resources:
 
 * [Get started with Ionic Framework](http://ionicframework.com/getting-started/)
+* [Angular + Spring Boot](developer blog URL tbd)
 * [Angular Authentication with OpenID Connect and Okta in 20 Minutes](http://developer.okta.com/blog/2017/04/17/angular-authentication-with-oidc)
 * [Getting Started with Angular](https://www.youtube.com/watch?v=Jq3szz2KOOs) A YouTube webinar by yours truly. ;)

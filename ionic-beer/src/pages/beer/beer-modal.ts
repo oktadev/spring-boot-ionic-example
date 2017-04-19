@@ -32,7 +32,7 @@ export class BeerModalPage {
   }
 
   save(form: NgForm) {
-    let update: boolean = form['href'];
+    let update: boolean = form['id'];
     this.beerService.save(form).subscribe(result => {
       let toast = this.toastCtrl.create({
         message: 'Beer "' + form.name + '" ' + ((update) ? 'updated' : 'added') + '.',
