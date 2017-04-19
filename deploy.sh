@@ -50,12 +50,12 @@ serverUri=https://`app_domain ionic-server`
 cd $r/ionic-beer
 npm run clean
 # replace the server URL in the client
-sed -i -e "s|http://localhost:8080|$serverUri|g" src/app/app.module.ts
-npm install && ionic build ios
+sed -i -e "s|http://localhost:8080|$serverUri|g" src/providers/beer-service.ts
+npm install
 
 # deploy client to phone
-ionic run ios
+ionic run ios --device
 
 # cleanup changed files
 git checkout $r/ionic-beer
-rm $r/ionic-beer/src/app/app.module.ts-e
+rm $r/ionic-beer/src/providers/beer-service.ts-e

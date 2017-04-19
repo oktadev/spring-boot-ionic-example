@@ -725,7 +725,7 @@ if ('serviceWorker' in navigator) {
 
 After making this change, the score should improve. In my tests, it increased to 66/100. The remaining issues were:
 
-* A couple -1’s in performance for "Cannot read property 'ts' of undefined”.
+* A couple -1’s in performance for "Cannot read property 'ts' of undefined".
 * Site is not progressively enhanced (page should contain some content when JavaScript is not available). This could likely be solved with [Angular’s app-shell directives](https://www.npmjs.com/package/@angular/app-shell).
 * Site is not on HTTPS and does not redirect HTTP to HTTPS.
 
@@ -752,17 +752,30 @@ To emulate or deploy to an iOS device, you’ll need a Mac and a fresh installat
 
 Make sure to open Xcode to complete the installation.
 
-To make your app iOS-capable, add support for it using the following command.
+Ionic 3.0 generates iOS-enabled applications by default. If you're using a version that didn't generate a `platforms/ios` directory, add support for it using the following command.
 
 ```
 ionic platform add ios
 ```
 
-You’ll need to run `ionic emulate ios` to open your app in Simulator.
+Then run `ionic emulate ios` to open your app in Simulator.
 
 The biggest problem I found when running the app in Simulator was that it was difficult to get the keyboard to popup. To workaround this, I used Edit > Hardware > Keyboard > Toggle Software Keyboard when I needed to type text in a field.
 
-To deploy the app to an iPhone, start by plugging your iOS device into your computer. Then run the following commands to install ios-deploy/ios-sim, build the app, and run it on your device. If you've
+Deploying to your phone will likely fail because it won't be able to connect to `http://localhost:8080`. To fix this, you can deploy your Spring Boot app to the internet, or use your computer's IP address (if you're on the same network). 
+
+<div style="padding: 5px; background: #eee; border: 1px solid silver; margin-bottom: 10px">
+<p>To deploy to Cloud Foundry, copy <a href="https://github.com/oktadeveloper/spring-boot-ionic-example/blob/master/deploy.sh">this deploy script</a> to your hard drive. It expects to be in a directory above your apps (e.g. <code>spring-boot-ionic-example</code>). It also expects your apps to be named <code>ionic-beer</code> and <code>server</code>.
+</p>
+<p>
+If you don't have a Cloud Foundry account, you'll need to <a href="https://account.run.pivotal.io/z/uaa/sign-up">create one</a>. Then install its command line tools for this script to work.
+</p>
+<pre style="margin-bottom: 0">
+brew tap cloudfoundry/tap && brew install cf-cli
+</pre>
+</div>
+
+To deploy the app to an iPhone, start by plugging it into your computer. Then run the following commands to install ios-deploy/ios-sim, build the app, and run it on your device. 
 
 ```
 npm install -g ios-deploy ios-sim
@@ -771,15 +784,9 @@ cd platforms/ios/
 open ionic-beer.xcodeproj
 ```
 
-Select your phone as the target in Xcode and click the play button to run your app. The first time you do this, Xcode may spin for a while with a “Processing symbol files” message at the top.
+Select your phone as the target in Xcode and click the play button to run your app. The first time you do this, Xcode may spin for a while with a "Processing symbol files" message at the top.
 
-Deploying to your phone will likely fail because it won't be able to connect to `http://localhost:8080`. To fix this, copy [this script](./deploy.sh) to your hard drive. It expects to be in a directory above your apps. It also expects your apps to be named `ionic-beer` and `server`.
-
-If you don't have a Cloud Foundry account, you'll need to [create one](https://account.run.pivotal.io/z/uaa/sign-up) and install its command line tools for this script to work.
-
-```
-brew tap cloudfoundry/tap && brew install cf-cli
-```
+**NOTE:** If you run into code signing issues, see [Ionic's deployment documentation](http://ionicframework.com/docs/intro/deploying/#ios-devices) to see how to solve.
 
 Once you’re configured your phone, computer, and Apple ID to work, you should be able to open the app and see the beer list you created. Below is how it looks on my iPhone 6s Plus.
 
