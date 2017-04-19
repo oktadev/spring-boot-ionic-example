@@ -825,7 +825,7 @@ Skin: Skin with dynamic hardware controls
 
 After performing these steps, you should be able to run `ionic emulate android` and see your app running in the AVD.
 
-<img src="static/android-beer-list.jpg" style="width: 540px" alt="Android Beer List">
+<img src="static/android-beer-list.png" style="width: 540px" alt="Android Beer List">
 
 **NOTE**: If you get an application error that says "The connection to the server was unsuccessful. (file:///android/www/index.html)", add the following line to `config.xml`. This sets the default timeout to 60 seconds (default is 20). Thanks to [Stack Overflow](http://stackoverflow.com/a/31377846) for the answer.
 
