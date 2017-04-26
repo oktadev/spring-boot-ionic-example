@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class BeerService {
-  public API = 'https://ionic-server-acrodont-protyle.cfapps.io';
+  public API = 'http://localhost:8080';
   public BEER_API = this.API + '/beers';
 
   constructor(private http: Http) {}
