@@ -19,16 +19,11 @@ public class BeerController {
 
     @GetMapping("/good-beers")
     @CrossOrigin(origins = {"http://localhost:8100","file://"})
-    public Collection<Map<String, String>> goodBeers() {
+    public Collection<Beer> goodBeers() {
 
         return repository.findAll().stream()
                 .filter(this::isGreat)
-                .map(b -> {
-                    Map<String, String> m = new HashMap<>();
-                    m.put("id", b.getId().toString());
-                    m.put("name", b.getName());
-                    return m;
-                }).collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 
     private boolean isGreat(Beer beer) {
