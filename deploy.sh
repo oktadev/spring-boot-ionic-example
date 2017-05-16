@@ -54,9 +54,9 @@ sed -i -e "s|http://localhost:8080|$serverUri|g" src/providers/beer-service.ts
 npm install
 
 # build ios
-ionic build ios --prod
+ionic cordova build ios --prod
 # Run on ios
-ionic run ios --device
+ionic cordova run ios 
 
 # If the above command fails with the following error:
 # xcrun: error: unable to find utility "PackageApplication", not a developer tool or in PATH
