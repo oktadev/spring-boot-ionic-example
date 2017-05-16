@@ -1,10 +1,6 @@
-Spring Boot, Ionic, and Stormpath
-
-This demo script shows pre-recorded IntelliJ Live Template shortcuts to build an Ionic and Spring Boot app. **Prerequisites**: Java 8, Node.js.
-
 ## Spring Boot API
 
-Create your Spring Boot API project using [start.spring.io](https://start.spring.io).
+Create your Spring Boot API project using [start.spring.io](https://start.spring.io) or the command line.
 
 ```
 http https://start.spring.io/starter.zip \
@@ -17,6 +13,8 @@ dependencies==data-jpa,data-rest,h2,web,devtools -d
 4. Add default data in the `run()` method. → **boot-add**
 5. Create a `BeerController` for your REST API. Add some business logic that results in a `/good-beers` endpoint. → **boot-controller**
 6. Add a `/good-beers` mapping that filters out beers that aren't great. → **boot-good**
+
+Git Commit
 
 ## Create Ionic App
 
@@ -33,27 +31,14 @@ ionic start ionic-beer --v2
 cd ionic-beer
 ionic serve
 ```
-<!--
-Tell Cordova it’s OK to display the keyboard without user interaction by adding the following to `config.xml` in the root directory. → **io-keyboard**
 
-```xml
-<preference name="KeyboardDisplayRequiresUserAction" value="false"/>
-```
--->
-
-Check your changes into Git.
-
-```
-git add .
-git commit -m "Create client"
-```
+Git Commit
 
 ## Build a Good Beers UI
 
-1. Run `ionic generate page beer` to create a component and a template to display the list of good beers. 
-2. Add `BeerPage` to the `declarations` and `entryComponent` lists in `app.module.ts`.
-3. Run `ionic generate provider beer-service` to create a service to fetch the beer list from the Spring Boot API.
-4. Change `src/providers/beer-service.ts` to use have a `getGoodBeers()` method. → **io-beer-service**
+1. Run `ionic generate page beer`. 
+2. Add `BeerPagePage` to the `imports` list in `app.module.ts`.
+3. Create `src/providers/beer-service.ts`. → **io-beer-service**
 5. Modify `beer.html` to show the list of beers. → **io-beer-list**
 6. Update `beer.ts` to import `BeerService` and add as a provider. Call the `getGoodBeers()` method in the `ionViewDidLoad()` lifecycle method. → **io-get-good-beers**
 7. To expose this page on the tab bar, add it to `tabs.ts`. Update `tabs.html` too!
@@ -66,7 +51,7 @@ If you run `ionic serve`, you’ll likely see a CORS error in your browser’s c
 
 Restart Spring Boot and your Ionic app. 
 
-Add some fun with Giphy! Run `ionic generate provider giphy-service`. → **ng-giphy-service**
+Add some fun with Giphy! Create `giphy-service.ts`. → **ng-giphy-service**
 
 Update `beer.ts` to take advantage of `GiphyService`. → **ng-giphy-foreach**
 
@@ -90,9 +75,15 @@ This won't compile because `BeerModalPage` doesn't exist. Create `beer-modal.ts`
 
 Create `beer-modal.html` as a template for this page. → **io-beer-modal-html**
 
-Add `BeerModalPage` to the `declarations` and `entryComponent` lists in `app.module.ts`.
+Add `BeerModalPage` to the `declarations` and `entryComponent` lists in `beer.module.ts`.
 
 You'll also need to modify `beer-service.ts` to have `get()` and `save()` methods. → **io-get-save**
+
+Demo how editing fails, then add `CrossOrigin` annotation to `BeerRepository`.
+
+```java
+@CrossOrigin(origins = {"http://localhost:8100","file://"})
+```
 
 ### Add Swipe to Delete
 
@@ -108,7 +99,7 @@ After making these additions, you should be able to add, edit and delete beers.
 
 Run the [Lighthouse Chrome extension](https://developers.google.com/web/tools/lighthouse/) on this application. To register a service worker, and improve the app’s score, uncomment the `serviceWorker` block in `index.html`.
 
-After making this change, the score should improve. In my tests, it increased to 69/100.  
+After making this change, the score should improve. In my tests, it increased to 75/100.  
 
 If you refresh the app and Chrome doesn’t prompt you to install the app (a PWA feature), you probably need to turn on a couple of features. 
 
@@ -128,10 +119,8 @@ To see how your application will look on different devices you can run `ionic se
 To emulate or deploy to an iOS device, you’ll need a Mac and a fresh installation of [Xcode](https://developer.apple.com/xcode/). If you’d like to build iOS apps on Windows, Ionic offers an [Ionic Package](http://ionic.io/cloud#packaging) service.
 
 ```
-ionic platform add ios
+ionic cordova emulate ios
 ```
-
-You’ll need to run `ionic emulate ios` to open your app in Simulator.
 
 The biggest problem I found when running the app in Simulator was that it was difficult to get the keyboard to popup. To workaround this, I used Edit > Hardware > Keyboard > Toggle Software Keyboard when I needed to type text in a field.
 
@@ -139,22 +128,15 @@ To deploy the app to an iPhone, start by plugging your iOS device into your comp
 
 ```
 npm install -g ios-deploy ios-sim
-ionic build ios
-cd platforms/ios/
-open ionic-beer.xcodeproj
+ionic build ios --prod
+open platforms/ios/MyApp.xcodeproj
 ```
 
 Select your phone as the target in Xcode and click the play button to run your app. 
 
 ### Android
 
-To deploy to the Android emulator, add support for it to the ionic-beer project using the `ionic` command.
-
-```
-ionic platform add android
-```
-
-If you run `ionic emulate android` you’ll get instructions from about how to create an emulator image.
+To deploy to the Android emulator, run `ionic cordova emulate android`.
 
 ```
 Error: No emulator images (avds) found.
@@ -173,4 +155,4 @@ CPU/ABI: Google APIs Intel Axom (x86_64)
 Skin: Skin with dynamic hardware controls
 ```
 
-After performing these steps, you should be able to run `ionic emulate android` and see your app running in the AVD.
+After performing these steps, you should be able to run `ionic cordova emulate android` and see your app running in the AVD.
