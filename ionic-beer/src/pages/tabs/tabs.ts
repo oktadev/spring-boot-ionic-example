@@ -9,10 +9,13 @@ import { BeerPage } from '../beer/beer';
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
-  tab1Root: any = HomePage;
-  tab2Root: any = BeerPage;
-  tab3Root: any = ContactPage;
-  tab4Root: any = AboutPage;
 
-  constructor() {}
+  tab1Root = HomePage;
+  tab2Root = BeerPage;
+  tab3Root = AboutPage;
+  tab4Root = ContactPage;
+
+  constructor() {
+
+  }
 }

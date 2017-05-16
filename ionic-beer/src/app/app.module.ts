@@ -10,9 +10,8 @@ import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { BeerModule } from '../pages/beer/beer.module';
+import { BeerPageModule } from '../pages/beer/beer.module';
 import { HttpModule } from '@angular/http';
-import { BeerModalPage } from '../pages/beer/beer-modal';
 
 @NgModule({
   declarations: [
@@ -26,7 +25,7 @@ import { BeerModalPage } from '../pages/beer/beer-modal';
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp),
-    BeerModule
+    BeerPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -34,8 +33,7 @@ import { BeerModalPage } from '../pages/beer/beer-modal';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage,
-    BeerModalPage
+    TabsPage
   ],
   providers: [
     StatusBar,

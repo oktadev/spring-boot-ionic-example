@@ -7,20 +7,20 @@ import { BeerModalPage } from './beer-modal';
 @IonicPage()
 @Component({
   selector: 'page-beer',
-  templateUrl: 'beer.html'
+  templateUrl: 'beer.html',
 })
 export class BeerPage {
   private beers: Array<any>;
 
-constructor(public navCtrl: NavController, public navParams: NavParams,
-          public beerService: BeerService, public giphyService: GiphyService,
-          public modalCtrl: ModalController, public toastCtrl: ToastController) {
-}
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              public beerService: BeerService, public giphyService: GiphyService,
+              public modalCtrl: ModalController, public toastCtrl: ToastController) {
+  }
 
   ionViewDidLoad() {
     this.beerService.getGoodBeers().subscribe(beers => {
       this.beers = beers;
-      for (let beer of this.beers) {
+      for (const beer of this.beers) {
         this.giphyService.get(beer.name).subscribe(url => {
           beer.giphyUrl = url
         });

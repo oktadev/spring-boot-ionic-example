@@ -1,6 +1,6 @@
 {
-  "name": "Ionic Beers",
-  "short_name": "Ionic Beers",
+  "name": "Ionic",
+  "short_name": "Ionic",
   "start_url": "index.html",
   "display": "standalone",
   "icons": [{

@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { IonicModule } from 'ionic-angular';
+import { IonicPageModule } from 'ionic-angular';
 import { BeerPage } from './beer';
-import { BeerModalPage } from './beer-modal';
 import { BeerService } from '../../providers/beer-service';
 import { GiphyService } from '../../providers/giphy-service';
+import { BeerModalPage } from './beer-modal';
 
 @NgModule({
   declarations: [
@@ -11,15 +11,17 @@ import { GiphyService } from '../../providers/giphy-service';
     BeerModalPage
   ],
   imports: [
-    IonicModule.forRoot(BeerPage)
+    IonicPageModule.forChild(BeerPage),
   ],
   exports: [
-    BeerPage,
-    BeerModalPage
+    BeerPage
   ],
   providers: [
     BeerService,
     GiphyService
+  ],
+  entryComponents: [
+    BeerModalPage
   ]
 })
-export class BeerModule {}
+export class BeerPageModule {}
