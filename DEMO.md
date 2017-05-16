@@ -7,7 +7,7 @@ http https://start.spring.io/starter.zip \
 dependencies==data-jpa,data-rest,h2,web,devtools -d
 ```
 
-1. Run the application with `./mvnw spring-boot:run`. Create a `Beer` entity class in `src/main/java/com/example/beer`. → **boot-entity**
+1. Open project in IntelliJ IDEA. Create a `Beer` entity class in `src/main/java/com/example/beer`. → **boot-entity**
 2. Create a JPA Repository to manage the `Beer` entity (tip: `@RepositoryRestResource`). → **boot-repository**
 3. Create a CommandLineRunner to populate the database. → **boot-command**
 4. Add default data in the `run()` method. → **boot-add**
@@ -37,7 +37,7 @@ Git Commit
 ## Build a Good Beers UI
 
 1. Run `ionic generate page beer`. 
-2. Add `BeerPagePage` to the `imports` list in `app.module.ts`.
+2. Add `BeerPageModule` to the `imports` list in `app.module.ts`.
 3. Create `src/providers/beer-service.ts`. → **io-beer-service**
 5. Modify `beer.html` to show the list of beers. → **io-beer-list**
 6. Update `beer.ts` to import `BeerService` and add as a provider. Call the `getGoodBeers()` method in the `ionViewDidLoad()` lifecycle method. → **io-get-good-beers**
@@ -75,7 +75,7 @@ This won't compile because `BeerModalPage` doesn't exist. Create `beer-modal.ts`
 
 Create `beer-modal.html` as a template for this page. → **io-beer-modal-html**
 
-Add `BeerModalPage` to the `declarations` and `entryComponent` lists in `beer.module.ts`.
+Import `BeerModalPage` in `beer.ts` and add it to the `declarations` and `entryComponent` lists in `beer.module.ts`.
 
 You'll also need to modify `beer-service.ts` to have `get()` and `save()` methods. → **io-get-save**
 
@@ -139,20 +139,9 @@ Select your phone as the target in Xcode and click the play button to run your a
 To deploy to the Android emulator, run `ionic cordova emulate android`.
 
 ```
-Error: No emulator images (avds) found.
-1. Download desired System Image by running: /Users/mraible/Library/Android/sdk/tools/android sdk
-2. Create an AVD by running: /Users/mraible/Library/Android/sdk/tools/android avd
-HINT: For a faster emulator, use an Intel System Image and install the HAXM device driver
-```
-
-Run the first suggestion and download your desired system image. Then  run the second command and created an AVD with the following settings:
-
-```
 AVD Name: TestPhone
 Device: Nexus 5
 Target: Android 7.1.1
 CPU/ABI: Google APIs Intel Axom (x86_64)
 Skin: Skin with dynamic hardware controls
 ```
-
-After performing these steps, you should be able to run `ionic cordova emulate android` and see your app running in the AVD.
