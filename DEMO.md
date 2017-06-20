@@ -7,14 +7,12 @@ http https://start.spring.io/starter.zip \
 dependencies==data-jpa,data-rest,h2,web,devtools -d
 ```
 
-1. Open project in IntelliJ IDEA. Create a `Beer` entity class in `src/main/java/com/example/beer`. → **boot-entity**
+1. Open project in IntelliJ IDEA. Create a `Beer` entity class in `src/main/java/com/example/demo/beer`. → **boot-entity**
 2. Create a JPA Repository to manage the `Beer` entity (tip: `@RepositoryRestResource`). → **boot-repository**
 3. Create a CommandLineRunner to populate the database. → **boot-command**
 4. Add default data in the `run()` method. → **boot-add**
 5. Create a `BeerController` for your REST API. Add some business logic that results in a `/good-beers` endpoint. → **boot-controller**
 6. Add a `/good-beers` mapping that filters out beers that aren't great. → **boot-good**
-
-Git Commit
 
 ## Create Ionic App
 
@@ -27,12 +25,10 @@ yarn global add cordova ionic
 From a terminal window, create a new application using the following command:
 
 ```
-ionic start ionic-beer --v2
+ionic start ionic-beer
 cd ionic-beer
 ionic serve
 ```
-
-Git Commit
 
 ## Build a Good Beers UI
 
@@ -75,7 +71,7 @@ This won't compile because `BeerModalPage` doesn't exist. Create `beer-modal.ts`
 
 Create `beer-modal.html` as a template for this page. → **io-beer-modal-html**
 
-Import `BeerModalPage` in `beer.ts` and add it to the `declarations` and `entryComponent` lists in `beer.module.ts`.
+Import `BeerModalPage` in `beer.ts` and add it to the `declarations` and `entryComponents` lists in `beer.module.ts`.
 
 You'll also need to modify `beer-service.ts` to have `get()` and `save()` methods. → **io-get-save**
 
@@ -119,16 +115,25 @@ To see how your application will look on different devices you can run `ionic se
 To emulate or deploy to an iOS device, you’ll need a Mac and a fresh installation of [Xcode](https://developer.apple.com/xcode/). If you’d like to build iOS apps on Windows, Ionic offers an [Ionic Package](http://ionic.io/cloud#packaging) service.
 
 ```
+npm install -g ios-sim
 ionic cordova emulate ios
+```
+
+If this fails, run the following to open/deploy the project.
+
+```
+open platforms/ios/MyApp.xcodeproj
 ```
 
 The biggest problem I found when running the app in Simulator was that it was difficult to get the keyboard to popup. To workaround this, I used Edit > Hardware > Keyboard > Toggle Software Keyboard when I needed to type text in a field.
 
-To deploy the app to an iPhone, start by plugging your iOS device into your computer. Then run the following commands to install ios-deploy/ios-sim, build the app, and run it on your device.
+In order to deploy the app to a phone, you'll need to deploy the backend to a public server. Copy `deploy.sh` from 
+[spring-boot-ionic-example](https://github.com/oktadeveloper/spring-boot-ionic-example) and run it to deploy the backend
+to Cloud Foundry.
+
+If this fails, run the following to open/deploy the project.
 
 ```
-npm install -g ios-deploy ios-sim
-ionic build ios --prod
 open platforms/ios/MyApp.xcodeproj
 ```
 
