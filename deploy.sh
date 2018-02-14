@@ -63,5 +63,5 @@ ionic cordova run ios
 # See http://stackoverflow.com/a/43363820
 
 # cleanup changed files
-git checkout $r/ionic-beer
+sed -i -e "s|$serverUri|http://localhost:8080|g" src/providers/beer-service.ts
 rm $r/ionic-beer/src/providers/beer-service.ts-e
