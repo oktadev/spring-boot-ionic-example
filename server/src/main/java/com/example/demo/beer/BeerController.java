@@ -16,7 +16,7 @@ public class BeerController {
     }
 
     @GetMapping("/good-beers")
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = {"http://localhost:8100","http://localhost:8080"})
     public Collection<Beer> goodBeers() {
 
         return repository.findAll().stream()

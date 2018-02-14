@@ -1,39 +1,34 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class BeerService {
-  public API = 'http://localhost:8080';
+  public API = 'http://192.168.1.48:8080';
   public BEER_API = this.API + '/beers';
 
-  constructor(public http: Http) {}
+  constructor(public http: HttpClient) {
+  }
 
   getGoodBeers(): Observable<any> {
-    return this.http.get(this.API + '/good-beers')
-      .map((response: Response) => response.json());
+    return this.http.get(this.API + '/good-beers');
   }
 
   get(id: string) {
-    return this.http.get(this.BEER_API + '/' + id)
-      .map((response: Response) => response.json());
+    return this.http.get(this.BEER_API + '/' + id);
   }
 
   save(beer: any): Observable<any> {
-    let result: Observable<Response>;
+    let result: Observable<Object>;
     if (beer['href']) {
       result = this.http.put(beer.href, beer);
     } else {
       result = this.http.post(this.BEER_API, beer)
     }
-    return result.map((response: Response) => response.json())
-      .catch(error => Observable.throw(error));
+    return result.catch(error => Observable.throw(error));
   }
 
   remove(id: string) {
-    return this.http.delete(this.BEER_API + '/' + id)
-      .map((response: Response) => response.json());
+    return this.http.delete(this.BEER_API + '/' + id);
   }
 }

@@ -19,7 +19,7 @@ export class BeerModalPage {
               public toastCtrl: ToastController,
               public navCtrl: NavController) {
     if (this.params.data.id) {
-      this.beerService.get(this.params.get('id')).subscribe(beer => {
+      this.beerService.get(this.params.get('id')).subscribe((beer: any) => {
         this.beer = beer;
         this.beer.href = beer._links.self.href;
         this.giphyService.get(beer.name).subscribe(url => beer.giphyUrl = url);

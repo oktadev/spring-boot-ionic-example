@@ -13,9 +13,6 @@ import { BeerModalPage } from './beer-modal';
   imports: [
     IonicPageModule.forChild(BeerPage),
   ],
-  exports: [
-    BeerPage
-  ],
   providers: [
     BeerService,
     GiphyService
