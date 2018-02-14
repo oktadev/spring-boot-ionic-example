@@ -2,7 +2,7 @@
 
 This project is an example application for a typical [Ionic](https://ionicframework.com/) app with a [Spring Boot](https://projects.spring.io/spring-boot/) backend.
 
-You can read about how this application was created in [this tutorial](http://developer.okta.com/blog/2017/05/17/develop-a-mobile-app-with-ionic-and-spring-boot). Feel free to copy any code in this project for your own use in accordance with the [Apache license](LICENSE).
+You can read about how this application was created in [Develop a Mobile App With Ionic and Spring Boot](http://developer.okta.com/blog/2017/05/17/develop-a-mobile-app-with-ionic-and-spring-boot). Feel free to copy any code in this project for your own use in accordance with the [Apache license](LICENSE).
 
 **Prerequisites**: Java 8 and Node.js.
 
