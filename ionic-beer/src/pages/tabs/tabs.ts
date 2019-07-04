@@ -11,8 +11,8 @@ import { BeerPage } from '../beer/beer';
 export class TabsPage {
   tab1Root = HomePage;
   tab2Root = BeerPage;
-  tab3Root = AboutPage;
-  tab4Root = ContactPage;
+  tab3Root = ContactPage;
+  tab4Root = AboutPage;
 
   constructor() {
 
