@@ -14,4 +14,4 @@ In another terminal window, install Ionic and Cordova.
 npm install -g ionic cordova
 ```
 
-Next, cd into `client` and execute `npm install && ionic serve`. The aforementioned [tutorial](http://developer.okta.com/blog/2017/05/17/develop-a-mobile-app-with-ionic-and-spring-boot) shows you how to deploy this app to an emulator/device. 
+Next, cd into `ionic-beer` and execute `npm install && ionic serve`. The aforementioned [tutorial](http://developer.okta.com/blog/2017/05/17/develop-a-mobile-app-with-ionic-and-spring-boot) shows you how to deploy this app to an emulator/device. 
